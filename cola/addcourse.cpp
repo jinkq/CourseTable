@@ -40,6 +40,12 @@ void AddCourse::addCourseInfo()
     QString courseLocation=ui->courseLocationEdit->text();
     QString courseTeacher=ui->courseTeacherEdit->text();
 
+    //判断课程名是否非空
+    if(courseName=="")
+    {
+        QMessageBox::warning(this,"error","课程名不能为空");
+        return;
+    }
 
     //判断课程节数是否合法
     if(courseTimeBegin>courseTimeEnd)
