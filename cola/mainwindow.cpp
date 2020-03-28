@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    qDebug() << QSqlDatabase::drivers();
+
     //连接数据库
     connectSql();
 
