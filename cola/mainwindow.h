@@ -40,11 +40,6 @@ public:
     //初始化课程表
     void initCourseTable();
 
-    //添加一门课程
-    void addACourse(int, int, QString);
-
-    QList<QFrame*> framelist;
-
     Ui::MainWindow *ui;
 
     //database

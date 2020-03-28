@@ -109,20 +109,6 @@ void MainWindow::initCourseTable()
     }
 }
 
-/*//day代表星期几，n代表是星期几的第几节课，courseName代表课程名字
-void MainWindow::addACourse(int day, int n, QString courseName)
-{
-    //通过day,n在framelist中找到对应的frame
-    QFrame* t = framelist[(day-1)+n-1];
-
-    //找到frame中的label
-    QList<QLabel*> labelList = t->findChildren<QLabel*>();
-
-    //修改label中的内容
-    labelList.at(0)->setText(courseName);
-}*/
-
-
 void MainWindow::on_addCourseButton_clicked()//添加新课程
 {
     //清空编辑区

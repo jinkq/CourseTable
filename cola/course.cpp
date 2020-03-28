@@ -92,6 +92,8 @@ void Course::run(QString courseName,int courseDay, int courseTimeBegin,
     ui->courseLocationEdit->setText(courseLocation);
     ui->courseTeacherEdit->setText(courseTeacher);
 
+
+
     //展示界面
     this->show();
 }
