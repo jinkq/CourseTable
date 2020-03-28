@@ -53,6 +53,9 @@ public:
     //database
     QSqlDatabase db;
 
+    //处理创建课程按钮的信号
+    void courseButtonSlot(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation);
+
 private slots:
     void on_addCourseButton_clicked();
 };

@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->addCourse.addcourse_db = this->db;
 
     //你调用这个函数之前要先传db
-    //this->addCourse.addCourseName();
 
     /*//进入课程详细信息页面
     connect(ui->enterLessonButton,&QPushButton::clicked,
@@ -28,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
         this->hide();
         this->course.show();
     });*/
+
+    //处理创建课程按钮的信号
+    connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::courseButtonSlot);
 
     //要接收从课程基本信息页面的返回信号
     connect(&course, &Course::back2Main,
@@ -121,4 +123,22 @@ void MainWindow::on_addCourseButton_clicked()//添加新课程
 {
    //模态对话框，添加新课程时不能做别的事情
    addCourse.exec();
+}
+
+void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation)
+{
+    if(courseTimeEnd>courseTimeBegin)
+    {
+        //合并单元格
+        ui->courseTable->setSpan(courseTimeBegin-1,courseDay,(courseTimeEnd-courseTimeBegin+1),1);
+    }
+
+    //往表格添加按钮
+    QPushButton *courseButton=new QPushButton(this);
+    courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
+    ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
+
+
+
+
 }

@@ -18,23 +18,22 @@ public:
     explicit AddCourse(QWidget *parent = nullptr);
     ~AddCourse();
 
-    //添加课程名
-    void addCourseName();
-
-    //添加课程时间
-    void addCourseTime();
-
-    //添加课程地点
-    void addCourseLocation();
-
-    //添加课程教师
-    void addCourseTeacher();
+    //添加课程信息
+    void addCourseInfo();
 
     //添加课程相关链接
     void addCourselink();
 
-    //database
+    //数据库
     QSqlDatabase addcourse_db;
+
+
+signals:
+    //创建课程按钮->MainWindow
+    void courseButtonSignal(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation);
+
+private slots:
+    void on_buttonBox_accepted();
 
 private:
     Ui::AddCourse *ui;

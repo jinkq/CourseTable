@@ -3,6 +3,7 @@
 #include<QSqlQuery>
 #include<QDebug>
 #include<QMessageBox>
+#include<QPushButton>
 
 AddCourse::AddCourse(QWidget *parent) :
     QDialog(parent),
@@ -13,6 +14,7 @@ AddCourse::AddCourse(QWidget *parent) :
     //设置窗口标题
     setWindowTitle("添加课程");
 
+
 }
 
 AddCourse::~AddCourse()
@@ -20,7 +22,7 @@ AddCourse::~AddCourse()
     delete ui;
 }
 
-void AddCourse::addCourseName()
+void AddCourse::addCourseInfo()
 {
     if(!addcourse_db.open())
        {
@@ -29,23 +31,33 @@ void AddCourse::addCourseName()
             exit(0);//退出程序
         }
 
+    //获取编辑区内容
     QString courseName=ui->courseNameEdit->text();
+    int courseDay=ui->courseDayEdit->currentIndex()+1;
+    int courseTimeBegin=ui->courseTimeEditBegin->currentIndex()+1;
+    int courseTimeEnd=ui->courseTimeEditEnd->currentIndex()+1;
     QString courseLocation=ui->courseLocationEdit->text();
     QString courseTeacher=ui->courseTeacherEdit->text();
 
-    //query.exec("insert into course(course_id) values (2);");
-
-    //query.exec(QString("insert into course(课程名, 课程地点, 课程教师) values ('%1', '%2', '%3');")
-      //         .arg(courseName).arg(courseLocation).arg(courseTeacher));
+    //判断课程节数是否合法
+    if(courseTimeBegin>courseTimeEnd)
+    {
+        QMessageBox::warning(this,"error","输入的课程节数不合法");
+        return;
+    }
 
     QSqlQuery query;
-    query.exec("select * from course;");
+    //将编辑区内容写入sql
+    query.exec(QString("insert into courseInfo(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation, courseTeacher) values ('%1', %2, %3, %4, '%5', '%6');")
+               .arg(courseName).arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd).arg(courseLocation).arg(courseTeacher));
 
-    while(query.next())//看有无内容
-    {
-        //一行一行遍历
-        //取出当前行的内容
-        qDebug()<<query.value(0).toInt()//类型转换
-                <<query.value(1).toString();
-    }
+    //向MainWindow发信号，创建课程按钮
+    emit courseButtonSignal(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation);
 }
+
+void AddCourse::on_buttonBox_accepted()
+{
+    addCourseInfo();
+}
+
+
