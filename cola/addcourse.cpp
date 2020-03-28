@@ -4,6 +4,7 @@
 #include<QDebug>
 #include<QMessageBox>
 #include<QPushButton>
+#include<QVariantList>
 
 AddCourse::AddCourse(QWidget *parent) :
     QDialog(parent),
@@ -39,6 +40,7 @@ void AddCourse::addCourseInfo()
     QString courseLocation=ui->courseLocationEdit->text();
     QString courseTeacher=ui->courseTeacherEdit->text();
 
+
     //判断课程节数是否合法
     if(courseTimeBegin>courseTimeEnd)
     {
@@ -52,7 +54,7 @@ void AddCourse::addCourseInfo()
                .arg(courseName).arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd).arg(courseLocation).arg(courseTeacher));
 
     //向MainWindow发信号，创建课程按钮
-    emit courseButtonSignal(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation);
+    emit courseButtonSignal(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation,courseTeacher);
 }
 
 void AddCourse::on_buttonBox_accepted()
@@ -60,4 +62,14 @@ void AddCourse::on_buttonBox_accepted()
     addCourseInfo();
 }
 
+void AddCourse::clearEdit()
+{
+    ui->courseNameEdit->clear();
+    ui->courseDayEdit->setCurrentIndex(0);
+    ui->courseTimeEditBegin->setCurrentIndex(0);
+    ui->courseTimeEditEnd->setCurrentIndex(0);
+    ui->courseLocationEdit->clear();
+    ui->courseTeacherEdit->clear();
+    ui->courseLinkEdit->clear();
+}
 

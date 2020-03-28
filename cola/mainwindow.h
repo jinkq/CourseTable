@@ -47,14 +47,11 @@ public:
 
     Ui::MainWindow *ui;
 
-    //基本参数
-    int coursePerDay;
-
     //database
     QSqlDatabase db;
 
     //处理创建课程按钮的信号
-    void courseButtonSlot(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation);
+    void courseButtonSlot(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation, QString courseTeacher);
 
 private:
     QPushButton *courseButton;

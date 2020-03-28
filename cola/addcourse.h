@@ -27,10 +27,12 @@ public:
     //数据库
     QSqlDatabase addcourse_db;
 
+    //清空编辑区
+    void clearEdit();
 
 signals:
     //创建课程按钮->MainWindow
-    void courseButtonSignal(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation);
+    void courseButtonSignal(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
 
 private slots:
     void on_buttonBox_accepted();

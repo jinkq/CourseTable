@@ -25,20 +25,32 @@ public:
 
     int course_id;
     QString courseName;
+    int courseDay;
+    int courseTimeBegin;
+    int courseTimeEnd;
+    QString courseLocation;
+    QString courseTeacher;
 
     DDL courseDdl;
     Link courseLink;
     Note courseNote;
+
 
     //数据库
     QSqlDatabase db;
 
     void sendSlot();
 
+    //
+    void run(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation, QString courseTeacher);
+
 signals:
     void back2Main();
 
 
+
+private slots:
+    void on_ddlButton_clicked();
 
 private:
     Ui::course *ui;

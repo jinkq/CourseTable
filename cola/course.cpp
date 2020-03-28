@@ -1,11 +1,14 @@
 ﻿#include "course.h"
 #include "ui_course.h"
+#include<QDebug>
 
 Course::Course(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::course)
 {
     ui->setupUi(this);
+
+
 
     //转到ddl界面
     connect(ui->ddlButton, &QPushButton::clicked,
@@ -25,7 +28,7 @@ Course::Course(QWidget *parent) :
     );
 
     //转到link界面
-    connect(ui->LinkButton, &QPushButton::clicked,
+    connect(ui->linkButton, &QPushButton::clicked,
             [=]
     {
         this->hide();
@@ -42,7 +45,7 @@ Course::Course(QWidget *parent) :
     );
 
     //转到note界面
-    connect(ui->NoteButton, &QPushButton::clicked,
+    connect(ui->noteButton, &QPushButton::clicked,
             [=]
     {
         this->hide();
@@ -78,4 +81,18 @@ void Course::sendSlot()
     emit back2Main();
 }
 
+void Course::run(QString courseName,int courseDay, int courseTimeBegin,
+                 int courseTimeEnd, QString courseLocation, QString courseTeacher)
+{
+    //初始化编辑区信息
+    ui->courseNameEdit->setText(courseName);
+    ui->courseDayEdit->setCurrentIndex(courseDay-1);
+    ui->courseTimeBeginEdit->setCurrentIndex(courseTimeBegin-1);
+    ui->courseTimeEndEdit->setCurrentIndex(courseTimeEnd-1);
+    ui->courseLocationEdit->setText(courseLocation);
+    ui->courseTeacherEdit->setText(courseTeacher);
+
+    //展示界面
+    this->show();
+}
 

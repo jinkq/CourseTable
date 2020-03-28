@@ -125,11 +125,14 @@ void MainWindow::addACourse(int day, int n, QString courseName)
 
 void MainWindow::on_addCourseButton_clicked()//添加新课程
 {
-   //模态对话框，添加新课程时不能做别的事情
-   addCourse.exec();
+    //清空编辑区
+    addCourse.clearEdit();
+
+    //模态对话框，添加新课程时不能做别的事情
+    addCourse.exec();
 }
 
-void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation)
+void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher)
 {
     if(courseTimeEnd>courseTimeBegin)
     {
@@ -147,10 +150,9 @@ void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseT
     connect(courseButton,&QPushButton::clicked,
             [=]()
     {
-        //this->course.courseName=courseName;
-
         this->hide();
-        this->course.show();
+        this->course.run(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
     }
+
             );
 }
