@@ -132,6 +132,14 @@ void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseT
     courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
     ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
 
+    //获取course_id
+    QSqlQuery query;
+    query.exec(QString("select * from courseInfo where courseName = '%1';").arg(courseName));
+    while(query.next())
+    {
+        qDebug()<<query.value(0).toInt();
+    }
+
     //将课程按钮转到课程界面
     connect(courseButton,&QPushButton::clicked,
             [=]()
