@@ -62,13 +62,13 @@ MainWindow::~MainWindow()
 void MainWindow::connectSql()
 {
     //添加MySql数据库
-    this->db=QSqlDatabase::addDatabase("QMYSQL");
+    this->db=QSqlDatabase::addDatabase("QSQLITE");
 
     //连接数据库
-    db.setHostName("127.0.0.1");//数据库服务器IP
-    db.setUserName("root");//数据库用户名
-    db.setPassword("pzjinkq");//密码
-    db.setDatabaseName("cms");//使用哪个数据库
+//    db.setHostName("127.0.0.1");//数据库服务器IP
+//    db.setUserName("root");//数据库用户名
+//    db.setPassword("pzjinkq");//密码
+    db.setDatabaseName("../database/cms.db");//使用哪个数据库
 
     //打开数据库
     if(!db.open())
