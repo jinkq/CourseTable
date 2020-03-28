@@ -24,13 +24,13 @@ public:
 
 
     int course_id;
-    QString course_name;
+    QString courseName;
 
-    DDL course_ddl;
-    Link course_link;
-    Note course_note;
+    DDL courseDdl;
+    Link courseLink;
+    Note courseNote;
 
-    //database
+    //数据库
     QSqlDatabase db;
 
     void sendSlot();

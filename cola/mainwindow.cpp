@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
     //处理创建课程按钮的信号
     connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::courseButtonSlot);
 
+
+
     //要接收从课程基本信息页面的返回信号
     connect(&course, &Course::back2Main,
             [=]
@@ -136,11 +138,19 @@ void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseT
     }
 
     //往表格添加按钮
-    QPushButton *courseButton=new QPushButton(this);
+    //QPushButton *courseButton=new QPushButton(this);
+    courseButton=new QPushButton(this);
     courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
     ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
 
+    //将课程按钮转到课程界面
+    connect(courseButton,&QPushButton::clicked,
+            [=]()
+    {
+        //this->course.courseName=courseName;
 
-
-
+        this->hide();
+        this->course.show();
+    }
+            );
 }

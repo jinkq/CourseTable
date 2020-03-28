@@ -1,4 +1,4 @@
-#include "course.h"
+﻿#include "course.h"
 #include "ui_course.h"
 
 Course::Course(QWidget *parent) :
@@ -12,14 +12,14 @@ Course::Course(QWidget *parent) :
             [=]
     {
         this->hide();
-        this->course_ddl.show();
+        this->courseDdl.show();
     });
 
     //处理从ddl回来的
-    connect(&course_ddl, &DDL::back2Course,
+    connect(&courseDdl, &DDL::back2Course,
             [=]
             {
-                this->course_ddl.hide();
+                this->courseDdl.hide();
                 this->show();
             }
     );
@@ -29,14 +29,14 @@ Course::Course(QWidget *parent) :
             [=]
     {
         this->hide();
-        this->course_link.show();
+        this->courseLink.show();
     });
 
     //处理从link回来的
-    connect(&course_link, &Link::back2Course,
+    connect(&courseLink, &Link::back2Course,
             [=]
             {
-                this->course_link.hide();
+                this->courseLink.hide();
                 this->show();
             }
     );
@@ -46,14 +46,14 @@ Course::Course(QWidget *parent) :
             [=]
     {
         this->hide();
-        this->course_note.show();
+        this->courseNote.show();
     });
 
     //处理从note回来的
-    connect(&course_note, &Note::back2Course,
+    connect(&courseNote, &Note::back2Course,
             [=]
             {
-                this->course_note.hide();
+                this->courseNote.hide();
                 this->show();
             }
     );
