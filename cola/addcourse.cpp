@@ -15,7 +15,6 @@ AddCourse::AddCourse(QWidget *parent) :
     //设置窗口标题
     setWindowTitle("添加课程");
 
-
 }
 
 AddCourse::~AddCourse()

@@ -2,6 +2,7 @@
 #define LINK_H
 
 #include <QWidget>
+#include <QSqlDatabase>
 
 namespace Ui {
 class Link;
@@ -17,6 +18,11 @@ public:
 
     void goback();
 
+    //数据库
+    QSqlDatabase link_db;
+
+    //显示对应course的link
+    void run(int course_id);
 signals:
     void back2Course();
 

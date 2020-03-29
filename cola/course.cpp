@@ -28,12 +28,14 @@ Course::Course(QWidget *parent) :
             }
     );
 
+    //传递数据库
+    this->courseLink.link_db = this->course_db;
     //转到link界面
     connect(ui->linkButton, &QPushButton::clicked,
             [=]
     {
         this->hide();
-        this->courseLink.show();
+        this->courseLink.run(course_id);
     });
 
     //处理从link回来的
