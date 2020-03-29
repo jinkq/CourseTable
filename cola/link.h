@@ -38,6 +38,7 @@ public:
 signals:
     void back2Course();
 
+
 private:
     Ui::Link *ui;
 };

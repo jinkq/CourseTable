@@ -22,6 +22,8 @@ Link::Link(QWidget *parent) :
     //发送返回课程页面信号
     connect(ui->returnButton, &QPushButton::clicked, this, &Link::goback);
 
+
+
 }
 
 Link::~Link()
@@ -79,6 +81,7 @@ void Link::run(int courseId)
         ui->linkTable->setCellWidget(rowNum,1,addressLabel);
 
         rowNum++;
+
     }
 
     //处理添加链接的信号
@@ -86,6 +89,7 @@ void Link::run(int courseId)
 
     //处理删除链接的信号
     connect(ui->delLinkButton,&QPushButton::clicked,this,&Link::delLink);
+
 }
 
 void Link::addLink()
@@ -113,27 +117,36 @@ void Link::addLink()
                .arg(course_id).arg(linkName).arg(linkAddress));
 
     QMessageBox::information(this,"success","添加成功");
+
+    //添加到list
+    linkNameList << linkName;
+    linkAddressList<< linkAddress;
 }
 
 void Link::delLink()
 {
+    //定位到行
     int currentRow=ui->linkTable->currentRow();
+    //测试行是否正确
+    //qDebug() << currentRow;
+
+    //TODO:
+    //加一个判断行是否小于零
+
+
+    //从list中读取到相应的信息，方便从数据库删除
+    QString linkName = linkNameList[currentRow];
+    QString linkAddress = linkAddressList[currentRow];
+    //读完后从list中删除掉
+    linkName.remove(currentRow);
+    linkAddress.remove(currentRow);
+
+    //测试
+    //qDebug() << linkName << " " << linkAddress;
 
     //从数据库中删除
-    QTableWidgetItem *linkNameItem=ui->linkTable->item(currentRow,0);
-    QTableWidgetItem *linkAddressItem=ui->linkTable->item(currentRow,1);
-
-    //获得删除的内容
-    if(linkNameItem==nullptr||linkAddressItem==nullptr)
-    {
-        QMessageBox::warning(this,"error","不能删除空行");
-        return;
-    }
-    QString linkName=linkNameItem->text();
-    QString linkAddress = linkAddressItem->text();
-
     QSqlQuery query;
-    query.exec(QString("delete from courseLink where linkName = '%1', linkAddress = '%2';")
+    query.exec(QString("Delete from courseLink where linkName = '%1' and linkAddress = '%2';")
                .arg(linkName).arg(linkAddress));
 
     //删除当前行
