@@ -20,19 +20,11 @@ MainWindow::MainWindow(QWidget *parent)
     //传递db
     this->addCourse.addcourse_db = this->db;
 
-    //你调用这个函数之前要先传db
+    //调用这个函数之前要先传db
 
-    /*//进入课程详细信息页面
-    connect(ui->enterLessonButton,&QPushButton::clicked,
-            [=]
-    {
-        this->hide();
-        this->course.show();
-    });*/
 
     //处理创建课程按钮的信号
-    connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::courseButtonSlot);
-
+    connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::addCourseButton);
 
 
     //要接收从课程基本信息页面的返回信号
@@ -43,19 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
         this->show();
     });
 
-
-    /*QList<QFrame*> frameList = ui->widget->findChildren<QFrame*>();
-    for(int i = 0; i < frameList.size(); i++)
-    {
-        QFrame *frame = frameList.at(i);
-
-        QList<QLabel*> labelList = frame->findChildren<QLabel*>();
-        if(labelList.size()>0)
-        {
-            labelList[0]->setText(QString::number(i));
-        }
-    }*/
-
 }
 
 MainWindow::~MainWindow()
@@ -65,7 +44,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectSql()
 {
-    //添加MySql数据库
+    //添加Sql数据库
     this->db=QSqlDatabase::addDatabase("QSQLITE");
 
     //连接数据库
@@ -96,16 +75,36 @@ void MainWindow::initCourseTable()
     header<<"时间"<<"星期一"<<"星期二"<<"星期三"<<"星期四"<<"星期五"<<"星期六"<<"星期日";
     ui->courseTable->setHorizontalHeaderLabels(header);
 
-    //将数据库内容写入table
+    //将schedule第一列内容写入table
     QSqlQuery query;
     query.exec("select * from schedule;");
 
     for(int i = 0; query.next(); i++)
     {
-        for(int j = 0; j < 8; j++)
-        {
-            ui->courseTable->setItem(i,j, new QTableWidgetItem(query.value(j).toString()));
-        }
+       ui->courseTable->setItem(i,0, new QTableWidgetItem(query.value(0).toString()));
+    }
+
+    //创建课程按钮
+    QString courseName;
+    int courseDay;
+    int courseTimeBegin;
+    int courseTimeEnd;
+    QString courseLocation;
+    QString courseTeacher;
+
+    query.exec("select * from courseInfo;");
+    while(query.next())
+    {
+        //获取信息
+        courseName=query.value("courseName").toString();
+        courseDay=query.value("courseDay").toInt();
+        courseTimeBegin=query.value("courseTimeBegin").toInt();
+        courseTimeEnd=query.value("courseTimeEnd").toInt();
+        courseLocation=query.value("courseLocation").toString();
+        courseTeacher=query.value("courseTeacher").toString();
+
+        //添加课程按钮
+        addCourseButton(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
     }
 }
 
@@ -118,7 +117,7 @@ void MainWindow::on_addCourseButton_clicked()//添加新课程
     addCourse.exec();
 }
 
-void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher)
+void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher)
 {
     if(courseTimeEnd>courseTimeBegin)
     {
@@ -132,7 +131,7 @@ void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseT
     courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
     ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
 
-    //获取course_id
+    //获取courseButton对应的course_id
     QSqlQuery query;
     query.exec(QString("select * from courseInfo where courseName = '%1';").arg(courseName));
     while(query.next())
@@ -147,6 +146,5 @@ void MainWindow::courseButtonSlot(QString courseName, int courseDay, int courseT
         this->hide();
         this->course.run(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
     }
-
-            );
+    );
 }
