@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //传递db
     this->addCourse.addcourse_db = this->db;
+    this->course.course_db=this->db;
 
     //调用这个函数之前要先传db
 
@@ -26,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
     //处理创建课程按钮的信号
     connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::addCourseButton);
 
+    //处理修改课程按钮的信号
+    connect(&course,&Course::changeCourseButtonSignal,this,&MainWindow::changeCourseButton);
+
+    //处理删除课程的信号
+    connect(&course,&Course::delCourseButtonSignal,this,&MainWindow::delCourseButton);
 
     //要接收从课程基本信息页面的返回信号
     connect(&course, &Course::back2Main,
@@ -132,11 +138,12 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
     ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
 
     //获取courseButton对应的course_id
+    int course_id;
     QSqlQuery query;
     query.exec(QString("select * from courseInfo where courseName = '%1';").arg(courseName));
     while(query.next())
     {
-        qDebug()<<query.value(0).toInt();
+        course_id=query.value(0).toInt();
     }
 
     //将课程按钮转到课程界面
@@ -144,7 +151,49 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
             [=]()
     {
         this->hide();
-        this->course.run(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
+        this->course.course_id=course_id;//传递course_id
+        this->course.courseName=courseName;
+        this->course.courseDay=courseDay;
+        this->course.courseTimeBegin=courseTimeBegin;
+        this->course.courseTimeEnd=courseTimeEnd;
+        this->course.courseLocation=courseLocation;
+        this->course.courseTeacher=courseTeacher;
+
+        this->course.run();
     }
     );
+}
+
+void MainWindow::changeCourseButton(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher)
+{
+    if(courseTimeEnd>courseTimeBegin)
+    {
+        //合并单元格
+        ui->courseTable->setSpan(courseTimeBegin-1,courseDay,(courseTimeEnd-courseTimeBegin+1),1);
+    }
+
+    //修改按钮
+    courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
+    ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
+
+    connect(courseButton,&QPushButton::clicked,
+            [=]()
+    {
+        this->hide();
+        this->course.courseName=courseName;
+        this->course.courseDay=courseDay;
+        this->course.courseTimeBegin=courseTimeBegin;
+        this->course.courseTimeEnd=courseTimeEnd;
+        this->course.courseLocation=courseLocation;
+        this->course.courseTeacher=courseTeacher;
+
+        this->course.run();
+    }
+    );
+}
+
+void MainWindow::delCourseButton(int courseTimeBegin,int courseDay)
+{
+    ui->courseTable->removeCellWidget(courseTimeBegin-1,courseDay);
+    delete courseButton;
 }

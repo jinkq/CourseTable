@@ -22,7 +22,7 @@ public:
     explicit Course(QWidget *parent = nullptr);
     ~Course();
 
-
+    //基本信息
     int course_id;
     QString courseName;
     int courseDay;
@@ -37,20 +37,31 @@ public:
 
 
     //数据库
-    QSqlDatabase db;
+    QSqlDatabase course_db;
 
     void sendSlot();
 
     //
-    void run(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation, QString courseTeacher);
+    void run();
 
+    //初始化编辑区
+    void initEdit();
+
+    //保存修改
+    void save();
+
+    //删除课程
+    void del();
 signals:
     void back2Main();
 
+    //修改课程按钮->MainWindow
+    void changeCourseButtonSignal(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
 
+    //删除课程按钮->MainWindow
+    void delCourseButtonSignal(int courseTimeBegin,int courseDay);
 
 private slots:
-    void on_ddlButton_clicked();
 
 private:
     Ui::course *ui;
