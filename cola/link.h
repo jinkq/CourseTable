@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QSqlDatabase>
+#include<QList>
 
 namespace Ui {
 class Link;
@@ -16,13 +17,24 @@ public:
     explicit Link(QWidget *parent = nullptr);
     ~Link();
 
+    //link信息
+    int course_id;
+    QList<QString> linkNameList;
+    QList<QString> linkAddressList;
+
     void goback();
 
     //数据库
     QSqlDatabase link_db;
 
     //显示对应course的link
-    void run(int course_id);
+    void run(int courseId);
+
+    //添加链接
+    void addLink();
+
+    //删除链接
+    void delLink();
 signals:
     void back2Course();
 

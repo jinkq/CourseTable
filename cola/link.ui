@@ -45,24 +45,24 @@
      <x>90</x>
      <y>50</y>
      <width>80</width>
-     <height>15</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>ADD</string>
+    <string>添加链接</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="deleteLinkButton">
+  <widget class="QPushButton" name="delLinkButton">
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>80</y>
+     <y>90</y>
      <width>80</width>
-     <height>15</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>DELETE</string>
+    <string>删除链接</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="linkTable">
@@ -70,8 +70,8 @@
     <rect>
      <x>180</x>
      <y>50</y>
-     <width>491</width>
-     <height>191</height>
+     <width>621</width>
+     <height>341</height>
     </rect>
    </property>
   </widget>
