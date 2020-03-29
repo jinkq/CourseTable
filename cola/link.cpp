@@ -17,13 +17,10 @@ Link::Link(QWidget *parent) :
     ui->setupUi(this);
 
     //去除焦点
-    //ui->tableWidget->setFocusPolicy(Qt::NoFocus);
+    ui-> linkTable->setFocusPolicy(Qt::NoFocus);
 
     //发送返回课程页面信号
     connect(ui->returnButton, &QPushButton::clicked, this, &Link::goback);
-
-
-
 }
 
 Link::~Link()
@@ -127,22 +124,21 @@ void Link::delLink()
 {
     //定位到行
     int currentRow=ui->linkTable->currentRow();
-    //测试行是否正确
-    //qDebug() << currentRow;
 
-    //TODO:
-    //加一个判断行是否小于零
-
+    //加一个判断行是否删除空的（未选中返回-1）
+    if(currentRow<0||currentRow==ui->linkTable->rowCount()-1)
+    {
+        QMessageBox::warning(this,"error","删除不能为空");
+        return;
+    }
 
     //从list中读取到相应的信息，方便从数据库删除
     QString linkName = linkNameList[currentRow];
     QString linkAddress = linkAddressList[currentRow];
+
     //读完后从list中删除掉
     linkName.remove(currentRow);
     linkAddress.remove(currentRow);
-
-    //测试
-    //qDebug() << linkName << " " << linkAddress;
 
     //从数据库中删除
     QSqlQuery query;
