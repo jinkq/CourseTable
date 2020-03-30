@@ -15,6 +15,7 @@ Link::Link(QWidget *parent) :
     ui(new Ui::Link)
 {
     ui->setupUi(this);
+    setWindowTitle("链接");
 
     //去除焦点
     ui-> linkTable->setFocusPolicy(Qt::NoFocus);

@@ -337,31 +337,6 @@
         </layout>
        </widget>
       </item>
-      <item>
-       <widget class="QWidget" name="widget_3" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="courseLinkLabel">
-           <property name="text">
-            <string>课程
-相关
-链接：</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="courseLinkEdit">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>70</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

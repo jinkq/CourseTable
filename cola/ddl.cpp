@@ -8,6 +8,8 @@ DDL::DDL(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowTitle("ddl");
+
     //去除焦点
     ui->ddlTable->setFocusPolicy(Qt::NoFocus);
 
@@ -32,6 +34,7 @@ void DDL::run(int courseId)
 
     //初始化ddlTable（加载信息）
     initDdlTable();
+    //TODO: 设置第一列不可编辑
 
 
 }
@@ -62,7 +65,7 @@ void DDL::initDdlTable()
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"课程"<<"ddl";
+    header<<"ddl"<<"截止时间";
     ui->ddlTable->setHorizontalHeaderLabels(header);
 
     //查询课程编号为course_id的所有link信息
@@ -76,15 +79,15 @@ void DDL::initDdlTable()
         //ddlAddressList<< query.value(3).toString();//链接地址
         ui->ddlTable->insertRow(rowNum);
 
-        //插入课程名
-        QLabel * courseLabel = new QLabel();
-        courseLabel->setText(courseName);
-        ui->ddlTable->setCellWidget(rowNum,0,courseLabel);
+//        //插入课程名
+//        QLabel * courseLabel = new QLabel();
+//        courseLabel->setText(courseName);
+//        ui->ddlTable->setCellWidget(rowNum,0,courseLabel);
 
         //插入ddl名
         QLabel * nameLabel = new QLabel();
         nameLabel->setText(ddlNameList[rowNum]);
-        ui->ddlTable->setCellWidget(rowNum,1,nameLabel);
+        ui->ddlTable->setCellWidget(rowNum,0,nameLabel);
 
         rowNum++;
     }

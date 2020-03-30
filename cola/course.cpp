@@ -9,6 +9,9 @@ Course::Course(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //设置窗口标题
+    setWindowTitle("课程信息");
+
     //传递数据库
     this->courseLink.link_db = this->course_db;
     this->courseDdl.ddl_db=this->course_db;
@@ -85,8 +88,11 @@ void Course::sendSlot()
     emit back2Main();
 }
 
-void Course::run()
+void Course::run(int courseId)
 {
+    //传course_id
+    course_id=courseId;
+
     //初始化编辑区信息
     initEdit();
 

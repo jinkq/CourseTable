@@ -40,6 +40,9 @@ public:
     //初始化课程表
     void initCourseTable();
 
+    //初始化ddl表
+    void initDdlTable();
+
     Ui::MainWindow *ui;
 
     //database

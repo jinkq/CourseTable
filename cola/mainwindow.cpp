@@ -14,6 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
     //连接数据库
     connectSql();
 
+    //设置tabWidget标题
+    ui->tabWidget->setTabText(0,"课程表");
+    ui->tabWidget->setTabText(1,"DDL表");
+
     //初始化课程表
     initCourseTable();
 
@@ -151,7 +155,7 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
             [=]()
     {
         this->hide();
-        this->course.course_id=course_id;//传递course_id
+        //this->course.course_id=course_id;//传递course_id
         this->course.courseName=courseName;
         this->course.courseDay=courseDay;
         this->course.courseTimeBegin=courseTimeBegin;
@@ -159,7 +163,7 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
         this->course.courseLocation=courseLocation;
         this->course.courseTeacher=courseTeacher;
 
-        this->course.run();
+        this->course.run(course_id);
     }
     );
 }
@@ -176,6 +180,15 @@ void MainWindow::changeCourseButton(QString courseName, int courseDay, int cours
     courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
     ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
 
+    //获取courseButton对应的course_id
+    int course_id;
+    QSqlQuery query;
+    query.exec(QString("select * from courseInfo where courseName = '%1';").arg(courseName));
+    while(query.next())
+    {
+        course_id=query.value(0).toInt();
+    }
+
     connect(courseButton,&QPushButton::clicked,
             [=]()
     {
@@ -187,7 +200,7 @@ void MainWindow::changeCourseButton(QString courseName, int courseDay, int cours
         this->course.courseLocation=courseLocation;
         this->course.courseTeacher=courseTeacher;
 
-        this->course.run();
+        this->course.run(course_id);
     }
     );
 }

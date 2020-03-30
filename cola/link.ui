@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
+    <width>857</width>
     <height>518</height>
    </rect>
   </property>
@@ -29,23 +29,23 @@
   <widget class="QPushButton" name="returnButton">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>130</y>
+     <x>60</x>
+     <y>150</y>
      <width>112</width>
      <height>34</height>
     </rect>
    </property>
    <property name="text">
-    <string>RETURN</string>
+    <string>返回</string>
    </property>
   </widget>
   <widget class="QPushButton" name="addLinkButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>50</y>
+     <x>80</x>
+     <y>60</y>
      <width>80</width>
-     <height>21</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
@@ -55,10 +55,10 @@
   <widget class="QPushButton" name="delLinkButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>90</y>
+     <x>80</x>
+     <y>100</y>
      <width>80</width>
-     <height>21</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">

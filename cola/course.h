@@ -42,7 +42,7 @@ public:
     void sendSlot();
 
     //
-    void run();
+    void run(int courseId);
 
     //初始化编辑区
     void initEdit();

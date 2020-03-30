@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>RETURN</string>
+    <string>返回</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="ddlTable">
@@ -52,9 +52,9 @@
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>60</x>
      <y>60</y>
-     <width>98</width>
+     <width>121</width>
      <height>121</height>
     </rect>
    </property>

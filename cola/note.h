@@ -27,8 +27,6 @@ public:
     //link信息
     int course_id;
     QString courseName;
-    QList<QString> linkNameList;
-    QList<QString> linkAddressList;
 
     //数据库
     QSqlDatabase note_db;

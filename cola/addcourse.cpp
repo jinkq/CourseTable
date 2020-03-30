@@ -75,6 +75,5 @@ void AddCourse::clearEdit()
     ui->courseTimeEditEnd->setCurrentIndex(0);
     ui->courseLocationEdit->clear();
     ui->courseTeacherEdit->clear();
-    ui->courseLinkEdit->clear();
 }
 

@@ -8,6 +8,7 @@ Note::Note(QWidget *parent) :
     ui(new Ui::Note)
 {
     ui->setupUi(this);
+    setWindowTitle("笔记");
 
     //发送返回课程页面信号
     connect(ui->returnButton, &QPushButton::clicked, this, &Note::goback);
