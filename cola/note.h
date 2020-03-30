@@ -48,6 +48,9 @@ public:
 signals:
     void back2Course();
 
+private slots:
+    void on_clearButton_clicked();
+
 private:
     Ui::Note *ui;
 };

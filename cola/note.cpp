@@ -95,6 +95,9 @@ void Note::saveNote()
             //获取编辑区内容
             QString str=ui->noteEdit->toPlainText();
 
+            //先将note的标题写在第一行
+            file.write((noteTitle+"\n").toUtf8());
+
             //写文件
             //QString->QByteArray
             file.write(str.toUtf8());
@@ -140,6 +143,14 @@ void Note::loadNote()
         bool isOk=file.open(QIODevice::ReadWrite);
         if(isOk==true)
         {
+            //先读标题
+            QByteArray title;
+            if(file.atEnd()==false)
+            {
+                title = file.readLine();
+                ui->noteTitleEdit->setText(title);
+            }
+
             //读文件（一行一行读）
             QByteArray array;
             while(file.atEnd()==false)
@@ -153,3 +164,10 @@ void Note::loadNote()
         file.close();
     }
 }
+
+void Note::on_clearButton_clicked()
+{
+    this->ui->noteEdit->setText("");
+    this->ui->noteTitleEdit->setText("");
+}
+
