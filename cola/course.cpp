@@ -9,14 +9,17 @@ Course::Course(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
+    //传递数据库
+    this->courseLink.link_db = this->course_db;
+    this->courseDdl.ddl_db=this->course_db;
+    this->courseNote.note_db=this->course_db;
 
     //转到ddl界面
     connect(ui->ddlButton, &QPushButton::clicked,
             [=]
     {
         this->hide();
-        this->courseDdl.show();
+        this->courseDdl.run(course_id);
     });
 
     //处理从ddl回来的
@@ -28,8 +31,6 @@ Course::Course(QWidget *parent) :
             }
     );
 
-    //传递数据库
-    this->courseLink.link_db = this->course_db;
     //转到link界面
     connect(ui->linkButton, &QPushButton::clicked,
             [=]
@@ -52,7 +53,7 @@ Course::Course(QWidget *parent) :
             [=]
     {
         this->hide();
-        this->courseNote.show();
+        this->courseNote.run(course_id);
     });
 
     //处理从note回来的

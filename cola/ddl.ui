@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>797</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="titleLabel">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>50</y>
-     <width>81</width>
+     <x>310</x>
+     <y>10</y>
+     <width>201</width>
      <height>18</height>
     </rect>
    </property>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="returnButton">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>210</y>
+     <x>60</x>
+     <y>200</y>
      <width>112</width>
      <height>34</height>
     </rect>
@@ -38,6 +38,49 @@
    <property name="text">
     <string>RETURN</string>
    </property>
+  </widget>
+  <widget class="QTableWidget" name="ddlTable">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>50</y>
+     <width>501</width>
+     <height>291</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>60</y>
+     <width>98</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="saveDdlButton">
+      <property name="text">
+       <string>保存修改</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="addDdlButton">
+      <property name="text">
+       <string>添加ddl</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="delDdlButton">
+      <property name="text">
+       <string>删除ddl</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

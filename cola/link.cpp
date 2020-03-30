@@ -38,11 +38,35 @@ void Link::run(int courseId)
     //传递course_id为成员
     this->course_id=courseId;
 
+    //初始化linkTable（加载信息）
+    initLinkTable();
+
+    //处理添加链接的信号
+    connect(ui->addLinkButton,&QPushButton::clicked,this,&Link::addLink);
+
+    //处理删除链接的信号
+    connect(ui->delLinkButton,&QPushButton::clicked,this,&Link::delLink);
+
+}
+
+void Link::initLinkTable()
+{
+    //获取对应course_id的courseName
+    QSqlQuery query;
+    query.exec(QString("select * from courseInfo where course_id = %1;").arg(course_id));
+    while(query.next())
+    {
+        courseName=query.value("courseName").toString();
+    }
+
+    //设置标题
+    ui->titleLabel->setText(courseName);
+
     //一行显示完整链接
     ui->linkTable->resizeColumnsToContents();
 
     this->show();
-    ui->title->setText(QString(course_id));
+    //ui->title->setText(QString(course_id));
     //设置行数、列数
     int row=1,col=2;
     ui->linkTable->setRowCount(row);
@@ -55,7 +79,7 @@ void Link::run(int courseId)
     ui->linkTable->setHorizontalHeaderLabels(header);
 
     //查询课程编号为course_id的所有link信息
-    QSqlQuery query;
+    //QSqlQuery query;
     query.exec(QString("select * from courseLink where course_id = %1").arg(course_id));
 
     int rowNum = 0;
@@ -80,13 +104,6 @@ void Link::run(int courseId)
         rowNum++;
 
     }
-
-    //处理添加链接的信号
-    connect(ui->addLinkButton,&QPushButton::clicked,this,&Link::addLink);
-
-    //处理删除链接的信号
-    connect(ui->delLinkButton,&QPushButton::clicked,this,&Link::delLink);
-
 }
 
 void Link::addLink()

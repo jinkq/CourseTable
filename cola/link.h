@@ -19,6 +19,7 @@ public:
 
     //link信息
     int course_id;
+    QString courseName;
     QList<QString> linkNameList;
     QList<QString> linkAddressList;
 
@@ -26,6 +27,9 @@ public:
 
     //数据库
     QSqlDatabase link_db;
+
+    //初始化linkTable（加载信息）
+    void initLinkTable();
 
     //显示对应course的link
     void run(int courseId);
