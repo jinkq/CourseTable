@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
      <x>240</x>
@@ -388,10 +388,10 @@
   <widget class="QWidget" name="widget_6" native="true">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>390</y>
+     <x>90</x>
+     <y>180</y>
      <width>98</width>
-     <height>64</height>
+     <height>121</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
