@@ -46,6 +46,15 @@ void Note::run(int courseId)
 
     //处理打开笔记的信号
     connect(ui->loadNoteButton,&QPushButton::clicked,this,&Note::loadNote);
+
+    //处理清空信号
+    connect(ui->clearButton,&QPushButton::clicked,
+            [=]()
+    {
+        ui->noteTitleEdit->clear();
+        ui->noteTitleEdit->clear();
+    }
+            );
 }
 
 void Note::saveNote()
@@ -100,6 +109,9 @@ void Note::saveNote()
 
 void Note::loadNote()
 {
+    ui->noteTitleEdit->clear();
+    ui->noteTitleEdit->clear();
+
     //获取笔记标题
     QString noteTitle=ui->noteTitleEdit->text();
 
