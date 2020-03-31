@@ -85,33 +85,39 @@ void DDL::initDdlTable()
     int rowNum = 0;
     while(query.next())
     {
-        ddlContentList << query.value("ddlContent").toString();//ddl名
-        ddlRequirementList<< query.value("ddlRequirement").toString();//ddl要求
-        ddlTimeList<< query.value("ddlTime").toDateTime();//ddl截止时间
-        ddlStatusList<<query.value("ddlStatus").toInt();//ddl状态
+        //新进一个ddl struct并加入到总的ddl list中去
+        ddl newddl;
+
+        newddl.ddl_id = query.value("ddl_id").toInt();//ddl_id
+        newddl.course_id = query.value("course_id").toInt();//course_id
+        newddl.ddlContent = query.value("ddlContent").toString();//ddl名
+        newddl.ddlRequirement = query.value("ddlRequirement").toString();//ddl要求
+        newddl.ddlTime = query.value("ddlTime").toDateTime();//ddl截止时间
+        newddl.ddlStatus = query.value("ddlStatus").toInt();//ddl状态
+        this->ddlList << newddl;
 
         //底部插入新行
         ui->ddlTable->insertRow(rowNum);
 
         //插入ddl内容
         QLabel * contentLabel = new QLabel();
-        contentLabel->setText(ddlContentList[rowNum]);
+        contentLabel->setText(newddl.ddlContent);
         ui->ddlTable->setCellWidget(rowNum,0,contentLabel);
 
         //插入ddl要求
         QLabel * requirementLabel = new QLabel();
-        requirementLabel->setText(ddlRequirementList[rowNum]);
+        requirementLabel->setText(newddl.ddlRequirement);
         ui->ddlTable->setCellWidget(rowNum,1,requirementLabel);
 
         //插入ddl截止时间
         QLabel * timeLabel = new QLabel();
-        timeLabel->setText(ddlTimeList[rowNum].toString("yyyy-MM-dd hh:mm"));
+        timeLabel->setText(newddl.ddlTime.toString("yyyy-MM-dd hh:mm"));
         ui->ddlTable->setCellWidget(rowNum,2,timeLabel);
 
         //插入ddl状态
         QLabel * statusLabel=new QLabel();
         QString status;
-        switch(ddlStatusList[rowNum])
+        switch(newddl.ddlStatus)
         {
         case 0:status="待完成";
             break;
@@ -126,7 +132,7 @@ void DDL::initDdlTable()
         ui->ddlTable->setCellWidget(rowNum,3,statusLabel);
 
         //待完成或逾期
-        if(ddlStatusList[rowNum]==0||ddlStatusList[rowNum]==2)
+        if(newddl.ddlStatus==0||newddl.ddlStatus==2)
         {
             //插入已完成按钮
             QPushButton * finishButton=new QPushButton(this);
@@ -137,11 +143,10 @@ void DDL::initDdlTable()
             connect(finishButton,&QPushButton::clicked,
                   [=]()
             {
-                ddlStatusList[rowNum]=1;
+                ddlList[rowNum].ddlStatus=1;
                 QSqlQuery query1;
-                query1.exec(QString("update courseDdl set ddlStatus = 1 where ddlContent = '%1', "
-                            "ddlRequirement = '%2', ddlTime = %3;").arg(ddlContentList[rowNum])
-                            .arg(ddlRequirementList[rowNum]).arg(ddlTimeList[rowNum]));
+                query1.exec(QString("update courseDdl set ddlStatus = 1 where ddl_id = '%1")
+                            .arg(newddl.ddl_id));
 
                 //更改表格中的status
                 statusLabel->setText("已完成");

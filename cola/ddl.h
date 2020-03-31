@@ -10,6 +10,17 @@ namespace Ui {
 class DDL;
 }
 
+//结构体
+struct ddl
+{
+    QString ddlContent;
+    QString ddlRequirement;
+    QDateTime ddlTime;
+    int ddlStatus;
+    int ddl_id;
+    int course_id;
+};
+
 class DDL : public QWidget
 {
     Q_OBJECT
@@ -19,15 +30,7 @@ public:
     ~DDL();
 
     void goback();
-    //结构体
-    struct ddl
-    {
-        QString ddlContent;
-        QString ddlRequirement;
-        QDateTime ddlTime;
-        int ddlStatus;
-        int ddl_id;
-    };
+
 
     //ddl信息
     int course_id;
