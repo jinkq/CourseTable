@@ -52,6 +52,13 @@ void Link::run(int courseId)
 
 void Link::initLinkTable()
 {
+    //适应长度
+    ui->linkTable->horizontalHeader()->setStretchLastSection(true);
+
+    //清空两个list
+    linkNameList.clear();
+    linkAddressList.clear();
+
     //获取对应course_id的courseName
     QSqlQuery query;
     query.exec(QString("select * from courseInfo where course_id = %1;").arg(course_id));
@@ -64,10 +71,10 @@ void Link::initLinkTable()
     ui->titleLabel->setText(courseName);
 
     //一行显示完整链接
-    ui->linkTable->resizeColumnsToContents();
+    //ui->linkTable->resizeColumnsToContents();
 
     this->show();
-    //ui->title->setText(QString(course_id));
+
     //设置行数、列数
     int row=1,col=2;
     ui->linkTable->setRowCount(row);
@@ -103,8 +110,8 @@ void Link::initLinkTable()
         ui->linkTable->setCellWidget(rowNum,1,addressLabel);
 
         rowNum++;
-
     }
+    //qDebug()<<linkNameList;
 }
 
 void Link::addLink()
@@ -124,6 +131,21 @@ void Link::addLink()
     QString linkName=linkNameItem->text();
     QString linkAddress = linkAddressItem->text();
 
+    //item设为空
+    linkNameItem->setText("");
+    linkAddressItem->setText("");
+
+    //label插入表格
+    QLabel* linkNameLabel=new QLabel(this);
+    QLabel* linkAddressLabel=new QLabel(this);
+    linkNameLabel->setText(linkName);
+    ui->linkTable->setCellWidget(row-1,0,linkNameLabel);
+    linkAddressLabel->setText(QString("<a href=%1>%2</a>")
+                          .arg(linkAddress).arg(linkAddress));
+    linkAddressLabel->setOpenExternalLinks(true);
+    ui->linkTable->setCellWidget(row-1,1,linkAddressLabel);
+
+
     //下面再加空行
     ui->linkTable->insertRow(row);
 
@@ -136,6 +158,8 @@ void Link::addLink()
     //添加到list
     linkNameList << linkName;
     linkAddressList<< linkAddress;
+
+    //initLinkTable();
 }
 
 void Link::delLink()
@@ -155,8 +179,8 @@ void Link::delLink()
     QString linkAddress = linkAddressList[currentRow];
 
     //读完后从list中删除掉
-    linkName.remove(currentRow);
-    linkAddress.remove(currentRow);
+    linkNameList.removeAt(currentRow);
+    linkAddressList.removeAt(currentRow);
 
     //从数据库中删除
     QSqlQuery query;
@@ -165,4 +189,6 @@ void Link::delLink()
 
     //删除当前行
     ui->linkTable->removeRow(currentRow);
+
+    //initLinkTable();
 }

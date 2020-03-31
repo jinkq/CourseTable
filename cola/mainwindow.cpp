@@ -74,6 +74,9 @@ void MainWindow::connectSql()
 
 void MainWindow::initCourseTable()
 {
+    //适应长度
+    //ui->courseTable->horizontalHeader()->setStretchLastSection(true);
+
     //设置行数、列数
     int row=11,col=8;
     ui->courseTable->setRowCount(row);

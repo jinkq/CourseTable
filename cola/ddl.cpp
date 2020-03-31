@@ -41,6 +41,9 @@ void DDL::run(int courseId)
 
 void DDL::initDdlTable()
 {
+    //适应长度
+    ui->ddlTable->horizontalHeader()->setStretchLastSection(true);
+
     //获取对应course_id的courseName
     QSqlQuery query;
     query.exec(QString("select * from courseInfo where course_id = %1;").arg(course_id));
@@ -53,19 +56,19 @@ void DDL::initDdlTable()
     ui->titleLabel->setText(courseName);
 
     //一行显示完整内容
-    ui->ddlTable->resizeColumnsToContents();
+    //ui->ddlTable->resizeColumnsToContents();
 
     this->show();
 
     //设置行数、列数
-    int row=1,col=2;
+    int row=1,col=3;
     ui->ddlTable->setRowCount(row);
     ui->ddlTable->setColumnCount(col);
 
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"ddl"<<"截止时间";
+    header<<"ddl"<<"要求"<<"截止时间";
     ui->ddlTable->setHorizontalHeaderLabels(header);
 
     //查询课程编号为course_id的所有link信息
