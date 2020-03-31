@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QSqlDatabase>
 #include<QList>
+#include<QDateTime>
 
 namespace Ui {
 class DDL;
@@ -18,12 +19,26 @@ public:
     ~DDL();
 
     void goback();
+    //结构体
+    struct ddl
+    {
+        QString ddlContent;
+        QString ddlRequirement;
+        QDateTime ddlTime;
+        int ddlStatus;
+        int ddl_id;
+    };
 
     //ddl信息
     int course_id;
     QString courseName;
-    QList<QString> ddlNameList;
-    //QList<QString> ddlAddressList;
+    QList<QString> ddlContentList;
+    QList<QString> ddlRequirementList;
+    QList<QDateTime>ddlTimeList;
+    QList<int>ddlStatusList;
+
+    QList<ddl> ddlList;
+
 
     //数据库
     QSqlDatabase ddl_db;

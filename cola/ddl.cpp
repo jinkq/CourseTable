@@ -1,6 +1,7 @@
 ﻿#include "ddl.h"
 #include "ui_ddl.h"
 #include<QSqlQuery>
+#include<QDateTime>
 
 DDL::DDL(QWidget *parent) :
     QWidget(parent),
@@ -34,7 +35,6 @@ void DDL::run(int courseId)
 
     //初始化ddlTable（加载信息）
     initDdlTable();
-    //TODO: 设置第一列不可编辑
 
 
 }
@@ -43,6 +43,13 @@ void DDL::initDdlTable()
 {
     //适应长度
     ui->ddlTable->horizontalHeader()->setStretchLastSection(true);
+
+    //清空三个list
+    ddlList.clear();
+//    ddlContentList.clear();
+//    ddlRequirementList.clear();
+//    ddlTimeList.clear();
+//    ddlStatusList.clear();
 
     //获取对应course_id的courseName
     QSqlQuery query;
@@ -61,37 +68,91 @@ void DDL::initDdlTable()
     this->show();
 
     //设置行数、列数
-    int row=1,col=3;
+    int row=1,col=5;
     ui->ddlTable->setRowCount(row);
     ui->ddlTable->setColumnCount(col);
 
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"ddl"<<"要求"<<"截止时间";
+    header<<"ddl"<<"要求"<<"截止时间"<<"状态"<<"";
     ui->ddlTable->setHorizontalHeaderLabels(header);
 
-    //查询课程编号为course_id的所有link信息
+    //查询课程编号为course_id的所有ddl信息
     //QSqlQuery query;
     query.exec(QString("select * from courseDdl where course_id = %1").arg(course_id));
 
     int rowNum = 0;
     while(query.next())
     {
-        ddlNameList << query.value(2).toString();//ddl名
-        //ddlAddressList<< query.value(3).toString();//链接地址
+        ddlContentList << query.value("ddlContent").toString();//ddl名
+        ddlRequirementList<< query.value("ddlRequirement").toString();//ddl要求
+        ddlTimeList<< query.value("ddlTime").toDateTime();//ddl截止时间
+        ddlStatusList<<query.value("ddlStatus").toInt();//ddl状态
+
+        //底部插入新行
         ui->ddlTable->insertRow(rowNum);
 
-//        //插入课程名
-//        QLabel * courseLabel = new QLabel();
-//        courseLabel->setText(courseName);
-//        ui->ddlTable->setCellWidget(rowNum,0,courseLabel);
+        //插入ddl内容
+        QLabel * contentLabel = new QLabel();
+        contentLabel->setText(ddlContentList[rowNum]);
+        ui->ddlTable->setCellWidget(rowNum,0,contentLabel);
 
-        //插入ddl名
-        QLabel * nameLabel = new QLabel();
-        nameLabel->setText(ddlNameList[rowNum]);
-        ui->ddlTable->setCellWidget(rowNum,0,nameLabel);
+        //插入ddl要求
+        QLabel * requirementLabel = new QLabel();
+        requirementLabel->setText(ddlRequirementList[rowNum]);
+        ui->ddlTable->setCellWidget(rowNum,1,requirementLabel);
 
+        //插入ddl截止时间
+        QLabel * timeLabel = new QLabel();
+        timeLabel->setText(ddlTimeList[rowNum].toString("yyyy-MM-dd hh:mm"));
+        ui->ddlTable->setCellWidget(rowNum,2,timeLabel);
+
+        //插入ddl状态
+        QLabel * statusLabel=new QLabel();
+        QString status;
+        switch(ddlStatusList[rowNum])
+        {
+        case 0:status="待完成";
+            break;
+        case 1:status="已完成";
+            break;
+        case 2:status="逾期";
+            break;
+        default:break;
+        }
+
+        statusLabel->setText(status);
+        ui->ddlTable->setCellWidget(rowNum,3,statusLabel);
+
+        //待完成或逾期
+        if(ddlStatusList[rowNum]==0||ddlStatusList[rowNum]==2)
+        {
+            //插入已完成按钮
+            QPushButton * finishButton=new QPushButton(this);
+            finishButton->setText("已完成");
+            ui->ddlTable->setCellWidget(rowNum,4,finishButton);
+
+            //处理完成信号
+            connect(finishButton,&QPushButton::clicked,
+                  [=]()
+            {
+                ddlStatusList[rowNum]=1;
+                QSqlQuery query1;
+                query1.exec(QString("update courseDdl set ddlStatus = 1 where ddlContent = '%1', "
+                            "ddlRequirement = '%2', ddlTime = %3;").arg(ddlContentList[rowNum])
+                            .arg(ddlRequirementList[rowNum]).arg(ddlTimeList[rowNum]));
+
+                //更改表格中的status
+                statusLabel->setText("已完成");
+
+                //删除按钮
+                ui->ddlTable->removeCellWidget(rowNum,4);
+                delete finishButton;
+
+            }
+                );
+        }
         rowNum++;
     }
 }
