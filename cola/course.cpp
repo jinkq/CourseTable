@@ -75,6 +75,11 @@ Course::Course(QWidget *parent) :
         sendSlot();
     });
 
+    //处理保存修改
+    connect(ui->saveButton,&QPushButton::clicked,this,&Course::save);
+
+    //处理删除课程
+    connect(ui->delButton,&QPushButton::clicked,this,&Course::del);
 }
 
 Course::~Course()
@@ -90,6 +95,8 @@ void Course::sendSlot()
 
 void Course::run(int courseId)
 {
+    qDebug() <<"run!";
+
     //传course_id
     course_id=courseId;
 
@@ -98,13 +105,6 @@ void Course::run(int courseId)
 
     //展示界面
     this->show();
-
-    //处理保存修改
-    connect(ui->saveButton,&QPushButton::clicked,this,&Course::save);
-
-    //处理删除课程
-    connect(ui->delButton,&QPushButton::clicked,this,&Course::del);
-
 }
 
 void Course::initEdit()
@@ -120,6 +120,7 @@ void Course::initEdit()
 
 void Course::save()
 {
+    qDebug() << "save!";
     if(!course_db.open())
        {
             QMessageBox::warning(this,QStringLiteral("错误"),"error");
@@ -158,13 +159,16 @@ void Course::save()
     QMessageBox::information(this,"success","保存成功");
 
     //向MainWindow发信号，修改课程按钮
-    emit changeCourseButtonSignal(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation,courseTeacher);
+    emit changeCourseButtonSignal();
+
+    qDebug() << "here";
+    this->close();
 }
 
 void Course::del()
 {
     QSqlQuery query;
-    //将编辑区内容写入sql
+    //从sql中删除课程
     query.exec(QString("delete from courseInfo where course_id = %1;")
                .arg(course_id));
 
@@ -172,5 +176,6 @@ void Course::del()
     QMessageBox::information(this,"success","删除成功");
 
     //向MainWindow发信号，修改课程按钮
-    emit delCourseButtonSignal(courseTimeBegin,courseDay);
+    this->close();
+    emit delCourseButtonSignal();
 }

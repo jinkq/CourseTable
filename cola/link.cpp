@@ -55,9 +55,8 @@ void Link::initLinkTable()
     //适应长度
     ui->linkTable->horizontalHeader()->setStretchLastSection(true);
 
-    //清空两个list
-    linkNameList.clear();
-    linkAddressList.clear();
+    //先清空link列表
+    linkList.clear();
 
     //获取对应course_id的courseName
     QSqlQuery query;
@@ -93,19 +92,28 @@ void Link::initLinkTable()
     int rowNum = 0;
     while(query.next())
     {
-        linkNameList << query.value(2).toString();//链接名
-        linkAddressList<< query.value(3).toString();//链接地址
+        //创建一个新的link
+        link newlink;
+        //读取数据
+        newlink.link_id = query.value("link_id").toInt();//link id
+        newlink.course_id = query.value("course_id").toInt();//course id
+        newlink.linkName = query.value(2).toString();//链接名
+        newlink.linkAddress = query.value(3).toString();//链接地址
+
+        //插入link list中
+        this->linkList << newlink;
+
         ui->linkTable->insertRow(rowNum);
 
         //插入链接名
         QLabel * nameLabel = new QLabel();
-        nameLabel->setText(linkNameList[rowNum]);
+        nameLabel->setText(newlink.linkName);
         ui->linkTable->setCellWidget(rowNum,0,nameLabel);
 
         //插入链接地址
         QLabel * addressLabel = new QLabel();
-        addressLabel->setText(QString("<a href=%1>%2</a>")
-                              .arg(linkAddressList[rowNum]).arg(linkAddressList[rowNum]));
+        addressLabel->setText(QString("<a href=%1>%1</a>")
+                              .arg(newlink.linkAddress));
         addressLabel->setOpenExternalLinks(true);
         ui->linkTable->setCellWidget(rowNum,1,addressLabel);
 
@@ -152,13 +160,21 @@ void Link::addLink()
     QSqlQuery query;
     query.exec(QString("insert into courseLink(course_id, linkName, linkAddress) values (%1, '%2', '%3');")
                .arg(course_id).arg(linkName).arg(linkAddress));
-
     QMessageBox::information(this,"success","添加成功");
 
     //添加到list
-    linkNameList << linkName;
-    linkAddressList<< linkAddress;
+    link newlink;
+    newlink.course_id = course_id;
+    newlink.linkName = linkName;
+    newlink.linkAddress = linkAddress;
+    qDebug() << newlink.course_id << newlink.linkName << newlink.linkAddress;
+    //读link_id出来
+    query.exec(QString("select link_id from courseLink where course_id = '%1' and linkName = '%2' and linkAddress = '%3'")
+               .arg(course_id).arg(newlink.linkName).arg(newlink.linkAddress));
+    query.next();
+    newlink.link_id = query.value("link_id").toInt();
 
+    linkList << newlink;
     //initLinkTable();
 }
 
@@ -174,21 +190,20 @@ void Link::delLink()
         return;
     }
 
-    //从list中读取到相应的信息，方便从数据库删除
-    QString linkName = linkNameList[currentRow];
-    QString linkAddress = linkAddressList[currentRow];
+    //从list中读取link_id
+    int delLink_id = linkList[currentRow].link_id;
 
     //读完后从list中删除掉
-    linkNameList.removeAt(currentRow);
-    linkAddressList.removeAt(currentRow);
+    linkList.removeAt(currentRow);
 
     //从数据库中删除
     QSqlQuery query;
-    query.exec(QString("Delete from courseLink where linkName = '%1' and linkAddress = '%2';")
-               .arg(linkName).arg(linkAddress));
+    query.exec(QString("Delete from courseLink where link_id = %1;")
+               .arg(delLink_id));
 
     //删除当前行
     ui->linkTable->removeRow(currentRow);
 
+    QMessageBox::information(this,"success","删除成功");
     //initLinkTable();
 }

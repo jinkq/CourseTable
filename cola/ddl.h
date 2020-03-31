@@ -10,7 +10,7 @@ namespace Ui {
 class DDL;
 }
 
-//结构体
+//ddl结构体
 struct ddl
 {
     QString ddlContent;

@@ -44,12 +44,9 @@ void DDL::initDdlTable()
     //适应长度
     ui->ddlTable->horizontalHeader()->setStretchLastSection(true);
 
-    //清空三个list
+    //清空三个ddl列表
     ddlList.clear();
-//    ddlContentList.clear();
-//    ddlRequirementList.clear();
-//    ddlTimeList.clear();
-//    ddlStatusList.clear();
+
 
     //获取对应course_id的courseName
     QSqlQuery query;

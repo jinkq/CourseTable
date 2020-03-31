@@ -56,10 +56,10 @@ signals:
     void back2Main();
 
     //修改课程按钮->MainWindow
-    void changeCourseButtonSignal(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
+    void changeCourseButtonSignal();
 
     //删除课程按钮->MainWindow
-    void delCourseButtonSignal(int courseTimeBegin,int courseDay);
+    void delCourseButtonSignal();
 
 private slots:
 

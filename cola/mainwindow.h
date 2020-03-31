@@ -52,10 +52,10 @@ public:
     void addCourseButton(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
 
     //修改课程按钮
-    void changeCourseButton(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
+    void changeCourseButton();
 
     //删除课程按钮
-    void delCourseButton(int courseTimeBegin,int courseDay);
+    void delCourseButton();
 
 
 private:

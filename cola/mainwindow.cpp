@@ -25,9 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->addCourse.addcourse_db = this->db;
     this->course.course_db=this->db;
 
-    //调用这个函数之前要先传db
-
-
     //处理创建课程按钮的信号
     connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::addCourseButton);
 
@@ -76,6 +73,11 @@ void MainWindow::initCourseTable()
 {
     //适应长度
     //ui->courseTable->horizontalHeader()->setStretchLastSection(true);
+
+    //初始化表格
+    ui->courseTable = new QTableWidget(ui->tab);
+    //ui->courseTable->verticalHeader()->setVisible(false); //设置垂直头不可见,即左边序号不见
+    ui->courseTable->setGeometry(10,0,1281,620);
 
     //设置行数、列数
     int row=11,col=8;
@@ -171,45 +173,16 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
     );
 }
 
-void MainWindow::changeCourseButton(QString courseName, int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher)
+void MainWindow::changeCourseButton()
 {
-    if(courseTimeEnd>courseTimeBegin)
-    {
-        //合并单元格
-        ui->courseTable->setSpan(courseTimeBegin-1,courseDay,(courseTimeEnd-courseTimeBegin+1),1);
-    }
-
-    //修改按钮
-    courseButton->setText(QString("%1\n(%2)").arg(courseName).arg(courseLocation));
-    ui->courseTable->setCellWidget(courseTimeBegin-1,courseDay,courseButton);
-
-    //获取courseButton对应的course_id
-    int course_id;
-    QSqlQuery query;
-    query.exec(QString("select * from courseInfo where courseName = '%1';").arg(courseName));
-    while(query.next())
-    {
-        course_id=query.value(0).toInt();
-    }
-
-    connect(courseButton,&QPushButton::clicked,
-            [=]()
-    {
-        this->hide();
-        this->course.courseName=courseName;
-        this->course.courseDay=courseDay;
-        this->course.courseTimeBegin=courseTimeBegin;
-        this->course.courseTimeEnd=courseTimeEnd;
-        this->course.courseLocation=courseLocation;
-        this->course.courseTeacher=courseTeacher;
-
-        this->course.run(course_id);
-    }
-    );
+    //直接重新加载，可以把原来的表格也显示出来了
+    initCourseTable();
+    this->show();
 }
 
-void MainWindow::delCourseButton(int courseTimeBegin,int courseDay)
+void MainWindow::delCourseButton()
 {
-    ui->courseTable->removeCellWidget(courseTimeBegin-1,courseDay);
-    delete courseButton;
+    //直接重新加载，可以把原来的表格也显示出来了
+    initCourseTable();
+    this->show();
 }

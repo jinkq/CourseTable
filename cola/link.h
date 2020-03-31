@@ -9,6 +9,16 @@ namespace Ui {
 class Link;
 }
 
+//link结构体
+struct link
+{
+    QString linkName;
+    QString linkAddress;
+    int link_id;
+    int course_id;
+};
+
+
 class Link : public QWidget
 {
     Q_OBJECT
@@ -18,10 +28,9 @@ public:
     ~Link();
 
     //link信息
+    QList<link> linkList;
     int course_id;
     QString courseName;
-    QList<QString> linkNameList;
-    QList<QString> linkAddressList;
 
     void goback();
 
