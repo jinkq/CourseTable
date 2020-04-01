@@ -322,6 +322,7 @@ void DDL::delDdl()
     //initLinkTable();
 }
 
+/*
 void DDL::saveDdl()
 {
     if(!ddl_db.open())
@@ -367,3 +368,4 @@ void DDL::saveDdl()
     qDebug() << "here";
     this->close();
 }
+*/

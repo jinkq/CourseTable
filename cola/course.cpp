@@ -95,8 +95,6 @@ void Course::sendSlot()
 
 void Course::run(int courseId)
 {
-    qDebug() <<"run!";
-
     //传course_id
     course_id=courseId;
 

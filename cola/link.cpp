@@ -22,6 +22,12 @@ Link::Link(QWidget *parent) :
 
     //发送返回课程页面信号
     connect(ui->returnButton, &QPushButton::clicked, this, &Link::goback);
+
+    //处理添加链接的信号
+    connect(ui->addLinkButton,&QPushButton::clicked,this,&Link::addLink);
+
+    //处理删除链接的信号
+    connect(ui->delLinkButton,&QPushButton::clicked,this,&Link::delLink);
 }
 
 Link::~Link()
@@ -41,13 +47,6 @@ void Link::run(int courseId)
 
     //初始化linkTable（加载信息）
     initLinkTable();
-
-    //处理添加链接的信号
-    connect(ui->addLinkButton,&QPushButton::clicked,this,&Link::addLink);
-
-    //处理删除链接的信号
-    connect(ui->delLinkButton,&QPushButton::clicked,this,&Link::delLink);
-
 }
 
 void Link::initLinkTable()
@@ -159,6 +158,7 @@ void Link::addLink()
     //下面再加空行
     ui->linkTable->insertRow(row);
 
+    //插入数据库
     QSqlQuery query;
     query.exec(QString("insert into courseLink(course_id, linkName, linkAddress) values (%1, '%2', '%3');")
                .arg(course_id).arg(linkName).arg(linkAddress));
