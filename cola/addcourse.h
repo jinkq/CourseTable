@@ -21,9 +21,6 @@ public:
     //添加课程信息
     void addCourseInfo();
 
-    //添加课程相关链接
-    void addCourselink();
-
     //数据库
     QSqlDatabase addcourse_db;
 

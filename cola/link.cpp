@@ -75,7 +75,7 @@ void Link::initLinkTable()
     this->show();
 
     //设置行数、列数
-    int row=1,col=2;
+    int row=0,col=2;
     ui->linkTable->setRowCount(row);
     ui->linkTable->setColumnCount(col);
 
@@ -100,9 +100,10 @@ void Link::initLinkTable()
         newLink.linkName = query.value(2).toString();//链接名
         newLink.linkAddress = query.value(3).toString();//链接地址
 
-        //插入link list中
+        //插入linkList中
         this->linkList << newLink;
 
+        //底部插入新行
         ui->linkTable->insertRow(rowNum);
 
         //插入链接名
@@ -119,6 +120,7 @@ void Link::initLinkTable()
 
         rowNum++;
     }
+    ui->linkTable->insertRow(rowNum);
     //qDebug()<<linkNameList;
 }
 

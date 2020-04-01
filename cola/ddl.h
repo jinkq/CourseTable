@@ -54,6 +54,9 @@ public:
     //删除ddl
     void delDdl();
 
+    //保存ddl修改
+    void saveDdl();
+
     //判断时间合法性
     bool isValidTime(const QString);
 

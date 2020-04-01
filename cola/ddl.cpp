@@ -42,7 +42,7 @@ void DDL::run(int courseId)
     connect(ui->addDdlButton,&QPushButton::clicked,this,&DDL::addDdl);
 
     //处理删除ddl的信号
-    //connect(ui->delDdlButton,&QPushButton::clicked,this,&DDL::delDdl);
+    connect(ui->delDdlButton,&QPushButton::clicked,this,&DDL::delDdl);
 
 }
 
@@ -53,7 +53,6 @@ void DDL::initDdlTable()
 
     //清空ddl列表
     ddlList.clear();
-
 
     //获取对应course_id的courseName
     QSqlQuery query;
@@ -72,7 +71,7 @@ void DDL::initDdlTable()
     this->show();
 
     //设置行数、列数
-    int row=1,col=5;
+    int row=0,col=5;
     ui->ddlTable->setRowCount(row);
     ui->ddlTable->setColumnCount(col);
 
@@ -98,6 +97,8 @@ void DDL::initDdlTable()
         newDdl.ddlRequirement = query.value("ddlRequirement").toString();//ddl要求
         newDdl.ddlTime = query.value("ddlTime").toString();//ddl截止时间
         newDdl.ddlStatus = query.value("ddlStatus").toInt();//ddl状态
+
+        //插入ddlList中
         this->ddlList << newDdl;
 
         //底部插入新行
@@ -164,6 +165,7 @@ void DDL::initDdlTable()
         }
         rowNum++;
     }
+    ui->ddlTable->insertRow(rowNum);
 }
 
 void DDL::addDdl()
@@ -288,4 +290,80 @@ bool DDL::isValidTime(const QString time)
         return true;
     }
     return false;
+}
+
+void DDL::delDdl()
+{
+    //定位到行
+    int currentRow=ui->ddlTable->currentRow();
+
+    //加一个判断行是否删除空的（未选中返回-1）
+    if(currentRow<0||currentRow==ui->ddlTable->rowCount()-1)
+    {
+        QMessageBox::warning(this,"error","删除不能为空");
+        return;
+    }
+
+    //从list中读取ddl_id
+    int delDdl_id = ddlList[currentRow].ddl_id;
+
+    //读完后从list中删除掉
+    ddlList.removeAt(currentRow);
+
+    //从数据库中删除
+    QSqlQuery query;
+    query.exec(QString("Delete from courseDdl where ddl_id = %1;")
+               .arg(delDdl_id));
+
+    //删除当前行
+    ui->ddlTable->removeRow(currentRow);
+
+    QMessageBox::information(this,"success","删除成功");
+    //initLinkTable();
+}
+
+void DDL::saveDdl()
+{
+    if(!ddl_db.open())
+       {
+            QMessageBox::warning(this,QStringLiteral("错误"),"error");
+            qDebug()<<"open sql error (in ddl)";
+            exit(0);//退出程序
+        }
+
+    //获取编辑区内容
+    courseName=ui->courseNameEdit->text();
+    courseDay=ui->courseDayEdit->currentIndex()+1;
+    courseTimeBegin=ui->courseTimeBeginEdit->currentIndex()+1;
+    courseTimeEnd=ui->courseTimeEndEdit->currentIndex()+1;
+    courseLocation=ui->courseLocationEdit->text();
+    courseTeacher=ui->courseTeacherEdit->text();
+
+    //判断课程名是否非空
+    if(courseName=="")
+    {
+        QMessageBox::warning(this,"error","课程名不能为空");
+        return;
+    }
+
+    //判断课程节数是否合法
+    if(courseTimeBegin>courseTimeEnd)
+    {
+        QMessageBox::warning(this,"error","输入的课程节数不合法");
+        return;
+    }
+
+    QSqlQuery query;
+    //将编辑区内容写入sql
+    query.exec(QString("update courseInfo set courseName = '%1', courseDay = %2,courseTimeBegin = %3, courseTimeEnd = %4, courseLocation = '%5',courseTeacher = '%6' where course_id = %7;")
+               .arg(courseName).arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd).arg(courseLocation).arg(courseTeacher).arg(course_id));
+
+    //保存成功
+    QMessageBox::information(this,"success","保存成功");
+
+    //向MainWindow发信号，修改课程按钮
+    emit changeCourseButtonSignal();
+
+    qDebug() << "here";
+    this->close();
 }
