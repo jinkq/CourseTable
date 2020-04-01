@@ -72,7 +72,7 @@ void DDL::initDdlTable()
     this->show();
 
     //设置行数、列数
-    int row=1,col=5;
+    int row=0,col=5;
     ui->ddlTable->setRowCount(row);
     ui->ddlTable->setColumnCount(col);
 
@@ -164,6 +164,7 @@ void DDL::initDdlTable()
         }
         rowNum++;
     }
+    ui->ddlTable->insertRow(rowNum);
 }
 
 void DDL::addDdl()
