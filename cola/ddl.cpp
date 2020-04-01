@@ -18,6 +18,12 @@ DDL::DDL(QWidget *parent) :
 
     //发送返回课程页面信号
     connect(ui->returnButton, &QPushButton::clicked, this, &DDL::goback);
+
+    //处理添加ddl的信号
+    connect(ui->addDdlButton,&QPushButton::clicked,this,&DDL::addDdl);
+
+    //处理删除ddl的信号
+    connect(ui->delDdlButton,&QPushButton::clicked,this,&DDL::delDdl);
 }
 
 DDL::~DDL()
@@ -37,13 +43,6 @@ void DDL::run(int courseId)
 
     //初始化ddlTable（加载信息）
     initDdlTable();
-
-    //处理添加ddl的信号
-    connect(ui->addDdlButton,&QPushButton::clicked,this,&DDL::addDdl);
-
-    //处理删除ddl的信号
-    connect(ui->delDdlButton,&QPushButton::clicked,this,&DDL::delDdl);
-
 }
 
 void DDL::initDdlTable()
