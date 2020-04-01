@@ -210,22 +210,20 @@ void DDL::addDdl()
     newDdl.ddlTime = ddlTime;
     newDdl.ddlStatus = ddlStatus;
 
-    //qDebug() << newDdl.course_id << newDdl.ddlContent << newDdl.ddlTime;
+    //添加到数据库
+    QSqlQuery query;
+    query.exec(QString("insert into courseDdl(course_id, ddlContent, ddlRequirement, ddlTime, ddlStatus)"
+                       " values (%1, '%2', '%3', '%4', %5);")
+               .arg(course_id).arg(ddlContent).arg(ddlRequirement).arg(ddlTime)
+               .arg(ddlStatus));
 
     //读ddl_id出来
-    QSqlQuery query;
-//    query.exec(QString("select * from courseDdl where course_id = %1, "
-//                       "ddlContent = '%2', ddlRequirement = '%3', ddlTime = '%4', ddlStatus = %5;")
-//               .arg(course_id).arg(newDdl.ddlContent).arg(newDdl.ddlRequirement)
-//               .arg(newDdl.ddlTime).arg(newDdl.ddlStatus));
-    query.exec(QString("select * from courseDdl where course_id = %1, "
-                       "ddlContent = '%2', ddlRequirement = '%3', ddlStatus = %4;")
-               .arg(course_id).arg(newDdl.ddlContent).arg(newDdl.ddlRequirement).arg(newDdl.ddlStatus));
-    while(query.next())
-    {
-        newDdl.ddl_id = query.value("ddl_id").toInt();
-        qDebug()<<1;
-    }
+    query.exec(QString("select ddl_id from courseDdl where course_id = '%1' and ddlContent = '%2' and ddlRequirement = '%3' and ddlTime = '%4' and ddlStatus = '%5';")
+               .arg(newDdl.course_id).arg(newDdl.ddlContent).arg(newDdl.ddlRequirement)
+               .arg(newDdl.ddlTime).arg(newDdl.ddlStatus));
+    query.next();
+    newDdl.ddl_id = query.value("ddl_id").toInt();
+
     qDebug()<<newDdl.ddl_id;
 
 
@@ -277,11 +275,7 @@ void DDL::addDdl()
     //下面再加空行
     ui->ddlTable->insertRow(row);
 
-    //添加到数据库
-    query.exec(QString("insert into courseDdl(course_id, ddlContent, ddlRequirement, ddlTime, ddlStatus)"
-                       " values (%1, '%2', '%3', '%4', %5);")
-               .arg(course_id).arg(ddlContent).arg(ddlRequirement).arg(ddlTime)
-               .arg(ddlStatus));
+
     QMessageBox::information(this,"success","添加成功");
 }
 

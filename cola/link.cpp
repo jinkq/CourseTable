@@ -173,6 +173,7 @@ void Link::addLink()
                .arg(course_id).arg(newlink.linkName).arg(newlink.linkAddress));
     query.next();
     newlink.link_id = query.value("link_id").toInt();
+    qDebug() << newlink.link_id;
 
     linkList << newlink;
     //initLinkTable();
