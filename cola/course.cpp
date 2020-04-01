@@ -29,7 +29,7 @@ Course::Course(QWidget *parent) :
     connect(&courseDdl, &DDL::back2Course,
             [=]
             {
-                this->courseDdl.hide();
+                this->courseDdl.close();
                 this->show();
             }
     );

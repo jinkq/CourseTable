@@ -24,6 +24,10 @@ DDL::DDL(QWidget *parent) :
 
     //处理删除ddl的信号
     connect(ui->delDdlButton,&QPushButton::clicked,this,&DDL::delDdl);
+
+    //处理保存ddl的信号
+    connect(ui->saveDdlButton, &QPushButton::clicked,this,&DDL::saveDdl);
+
 }
 
 DDL::~DDL()
@@ -104,22 +108,22 @@ void DDL::initDdlTable()
         ui->ddlTable->insertRow(rowNum);
 
         //插入ddl内容
-        QLabel * contentLabel = new QLabel();
+        QLineEdit * contentLabel = new QLineEdit();
         contentLabel->setText(newDdl.ddlContent);
         ui->ddlTable->setCellWidget(rowNum,0,contentLabel);
 
         //插入ddl要求
-        QLabel * requirementLabel = new QLabel();
+        QLineEdit * requirementLabel = new QLineEdit();
         requirementLabel->setText(newDdl.ddlRequirement);
         ui->ddlTable->setCellWidget(rowNum,1,requirementLabel);
 
         //插入ddl截止时间
-        QLabel * timeLabel = new QLabel();
+        QLineEdit * timeLabel = new QLineEdit();
         timeLabel->setText(newDdl.ddlTime);
         ui->ddlTable->setCellWidget(rowNum,2,timeLabel);
 
         //插入ddl状态
-        QLabel * statusLabel=new QLabel();
+        QLineEdit * statusLabel=new QLineEdit();
         QString status;
         switch(newDdl.ddlStatus)
         {
@@ -231,10 +235,10 @@ void DDL::addDdl()
     ddlList << newDdl;
 
     //label插入表格
-    QLabel* ddlContentLabel=new QLabel(this);
-    QLabel* ddlRequirementLabel=new QLabel(this);
-    QLabel* ddlTimeLabel=new QLabel(this);
-    QLabel* ddlStatusLabel=new QLabel(this);
+    QLineEdit* ddlContentLabel=new QLineEdit(this);
+    QLineEdit* ddlRequirementLabel=new QLineEdit(this);
+    QLineEdit* ddlTimeLabel=new QLineEdit(this);
+    QLineEdit* ddlStatusLabel=new QLineEdit(this);
 
     ddlContentLabel->setText(ddlContent);
     ui->ddlTable->setCellWidget(row-1,0,ddlContentLabel);
@@ -321,50 +325,32 @@ void DDL::delDdl()
     //initLinkTable();
 }
 
-/*
+
 void DDL::saveDdl()
 {
-    if(!ddl_db.open())
-       {
-            QMessageBox::warning(this,QStringLiteral("错误"),"error");
-            qDebug()<<"open sql error (in ddl)";
-            exit(0);//退出程序
-        }
-
-    //获取编辑区内容
-    courseName=ui->courseNameEdit->text();
-    courseDay=ui->courseDayEdit->currentIndex()+1;
-    courseTimeBegin=ui->courseTimeBeginEdit->currentIndex()+1;
-    courseTimeEnd=ui->courseTimeEndEdit->currentIndex()+1;
-    courseLocation=ui->courseLocationEdit->text();
-    courseTeacher=ui->courseTeacherEdit->text();
-
-    //判断课程名是否非空
-    if(courseName=="")
-    {
-        QMessageBox::warning(this,"error","课程名不能为空");
-        return;
-    }
-
-    //判断课程节数是否合法
-    if(courseTimeBegin>courseTimeEnd)
-    {
-        QMessageBox::warning(this,"error","输入的课程节数不合法");
-        return;
-    }
-
     QSqlQuery query;
-    //将编辑区内容写入sql
-    query.exec(QString("update courseInfo set courseName = '%1', courseDay = %2,courseTimeBegin = %3, courseTimeEnd = %4, courseLocation = '%5',courseTeacher = '%6' where course_id = %7;")
-               .arg(courseName).arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd).arg(courseLocation).arg(courseTeacher).arg(course_id));
-
+    //依次去读出每一行的状态，更新到list中，然后更新数据库
+    for (int i = 0;i < ui->ddlTable->rowCount()-1;i++)
+    {
+        qDebug() << i;
+        //更新list中的信息
+        this->ddlList[i].ddlContent = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,0))->text();
+        this->ddlList[i].ddlRequirement = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,1))->text();
+        this->ddlList[i].ddlTime = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,2))->text();
+        this->ddlList[i].ddlStatus = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,3))->text().toInt();
+        //检查时间的合法性
+        if(!isValidTime(ddlList[i].ddlTime))
+        {
+            QMessageBox::warning(this,"error",QString("第%1行:非法的ddl截止时间，格式：2020-01-01 12:00").arg(i));
+            continue;
+        }
+        //写到数据库中
+        //将编辑区内容写入sql
+        query.exec(QString("update courseDdl set ddlContent = '%1', ddlRequirement = '%2',ddlTime = '%3', ddlStatus = '%4' where ddl_id = '%5';")
+                   .arg(ddlList[i].ddlContent).arg(ddlList[i].ddlRequirement)
+                   .arg(ddlList[i].ddlTime).arg(ddlList[i].ddlStatus).arg(ddlList[i].ddl_id));
+    }
     //保存成功
     QMessageBox::information(this,"success","保存成功");
-
-    //向MainWindow发信号，修改课程按钮
-    emit changeCourseButtonSignal();
-
-    qDebug() << "here";
-    this->close();
 }
-*/
+

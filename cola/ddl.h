@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include<QList>
 #include<QDateTime>
+#include <QLineEdit>
 
 namespace Ui {
 class DDL;
