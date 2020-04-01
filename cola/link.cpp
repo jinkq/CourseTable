@@ -93,27 +93,27 @@ void Link::initLinkTable()
     while(query.next())
     {
         //创建一个新的link
-        link newlink;
+        link newLink;
         //读取数据
-        newlink.link_id = query.value("link_id").toInt();//link id
-        newlink.course_id = query.value("course_id").toInt();//course id
-        newlink.linkName = query.value(2).toString();//链接名
-        newlink.linkAddress = query.value(3).toString();//链接地址
+        newLink.link_id = query.value("link_id").toInt();//link id
+        newLink.course_id = query.value("course_id").toInt();//course id
+        newLink.linkName = query.value(2).toString();//链接名
+        newLink.linkAddress = query.value(3).toString();//链接地址
 
         //插入link list中
-        this->linkList << newlink;
+        this->linkList << newLink;
 
         ui->linkTable->insertRow(rowNum);
 
         //插入链接名
         QLabel * nameLabel = new QLabel();
-        nameLabel->setText(newlink.linkName);
+        nameLabel->setText(newLink.linkName);
         ui->linkTable->setCellWidget(rowNum,0,nameLabel);
 
         //插入链接地址
         QLabel * addressLabel = new QLabel();
         addressLabel->setText(QString("<a href=%1>%1</a>")
-                              .arg(newlink.linkAddress));
+                              .arg(newLink.linkAddress));
         addressLabel->setOpenExternalLinks(true);
         ui->linkTable->setCellWidget(rowNum,1,addressLabel);
 

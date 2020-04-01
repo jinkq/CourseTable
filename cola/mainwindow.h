@@ -51,13 +51,6 @@ public:
     //添加课程按钮
     void addCourseButton(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
 
-    //修改课程按钮
-    void changeCourseButton();
-
-    //删除课程按钮
-    void delCourseButton();
-
-
 private:
     QPushButton *courseButton;
 private slots:

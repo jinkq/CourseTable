@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    qDebug() << QSqlDatabase::drivers();
+    //qDebug() << QSqlDatabase::drivers();
 
     //连接数据库
     connectSql();
@@ -29,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::addCourseButton);
 
     //处理修改课程按钮的信号
-    connect(&course,&Course::changeCourseButtonSignal,this,&MainWindow::changeCourseButton);
+    connect(&course,&Course::changeCourseButtonSignal,this,&MainWindow::initCourseTable);
 
     //处理删除课程的信号
-    connect(&course,&Course::delCourseButtonSignal,this,&MainWindow::delCourseButton);
+    connect(&course,&Course::delCourseButtonSignal,this,&MainWindow::initCourseTable);
 
     //要接收从课程基本信息页面的返回信号
     connect(&course, &Course::back2Main,
@@ -121,6 +121,8 @@ void MainWindow::initCourseTable()
         //添加课程按钮
         addCourseButton(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
     }
+
+    this->show();
 }
 
 void MainWindow::on_addCourseButton_clicked()//添加新课程
@@ -171,18 +173,4 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
         this->course.run(course_id);
     }
     );
-}
-
-void MainWindow::changeCourseButton()
-{
-    //直接重新加载，可以把原来的表格也显示出来了
-    initCourseTable();
-    this->show();
-}
-
-void MainWindow::delCourseButton()
-{
-    //直接重新加载，可以把原来的表格也显示出来了
-    initCourseTable();
-    this->show();
 }

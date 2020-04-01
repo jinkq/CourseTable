@@ -15,7 +15,7 @@ struct ddl
 {
     QString ddlContent;
     QString ddlRequirement;
-    QDateTime ddlTime;
+    QString ddlTime;
     int ddlStatus;
     int ddl_id;
     int course_id;
@@ -35,10 +35,6 @@ public:
     //ddl信息
     int course_id;
     QString courseName;
-    QList<QString> ddlContentList;
-    QList<QString> ddlRequirementList;
-    QList<QDateTime>ddlTimeList;
-    QList<int>ddlStatusList;
 
     QList<ddl> ddlList;
 
@@ -57,6 +53,9 @@ public:
 
     //删除ddl
     void delDdl();
+
+    //判断时间合法性
+    bool isValidTime(const QString);
 
 signals:
     void back2Course();
