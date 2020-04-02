@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->setTabText(0,"课程表");
     ui->tabWidget->setTabText(1,"DDL表");
 
-    //初始化课程表
-    initCourseTable();
+    //初始化main窗口的所有内容
+    initMain();
 
     //传递db
     this->addCourse.addcourse_db = this->db;
@@ -118,11 +118,12 @@ void MainWindow::initCourseTable()
         courseLocation=query.value("courseLocation").toString();
         courseTeacher=query.value("courseTeacher").toString();
 
+        //记录course_id和courseName
+        this->courseId_Name.insert(query.value("course_id").toInt(),courseName);
+
         //添加课程按钮
         addCourseButton(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
     }
-
-    this->show();
 }
 
 void MainWindow::on_addCourseButton_clicked()//添加新课程
@@ -183,47 +184,129 @@ void MainWindow::initDdlTable()
     ui->ddlTable->setGeometry(10,0,1281,620);
 
     //设置行数、列数
-    int row=0,col=5;
-    ui->courseTable->setRowCount(row);
-    ui->courseTable->setColumnCount(col);
+    int row=0,col=6;
+    ui->ddlTable->setRowCount(row);
+    ui->ddlTable->setColumnCount(col);
+
 
     //设置表头
     QStringList header;
     //将表头写入表格
     header<<"课程名"<<"ddl"<<"要求"<<"截止时间"<<"状态"<<"";
-    ui->courseTable->setHorizontalHeaderLabels(header);
+    ui->ddlTable->setHorizontalHeaderLabels(header);
 
-//    //将schedule第一列内容写入table
-//    QSqlQuery query;
-//    query.exec("select * from schedule;");
+    //将ddl信息全部读出，放到ddlList中
+    QSqlQuery query;
+    query.exec("select * from courseDdl;");
+    while(query.next())
+    {
+        ddl newddl;
+        newddl.ddl_id = query.value("ddl_id").toInt();
+        newddl.course_id = query.value("course_id").toInt();
+        newddl.ddlContent = query.value("ddlContent").toString();
+        newddl.ddlRequirement = query.value("ddlRequirement").toString();
+        newddl.ddlTime = query.value("ddlTime").toString();
+        newddl.ddlStatus = query.value("ddlStatus").toInt();
+        insert(newddl,ddlList);
+    }
 
-//    for(int i = 0; query.next(); i++)
-//    {
-//       ui->courseTable->setItem(i,0, new QTableWidgetItem(query.value(0).toString()));
-//    }
+    //将所有ddl展示出来
+    for(int i = 0;i < ddlList.size();i++)
+    {
+        ui->ddlTable->insertRow(i);
 
-//    //创建课程按钮
-//    QString courseName;
-//    int courseDay;
-//    int courseTimeBegin;
-//    int courseTimeEnd;
-//    QString courseLocation;
-//    QString courseTeacher;
+        //插入ddl课程名
+        QLabel * courseNameLabel = new QLabel();
+        courseNameLabel->setText(courseId_Name[ddlList[i].course_id]);
+        ui->ddlTable->setCellWidget(i,0,courseNameLabel);
 
-//    query.exec("select * from courseInfo;");
-//    while(query.next())
-//    {
-//        //获取信息
-//        courseName=query.value("courseName").toString();
-//        courseDay=query.value("courseDay").toInt();
-//        courseTimeBegin=query.value("courseTimeBegin").toInt();
-//        courseTimeEnd=query.value("courseTimeEnd").toInt();
-//        courseLocation=query.value("courseLocation").toString();
-//        courseTeacher=query.value("courseTeacher").toString();
+        //插入ddl内容
+        QLineEdit * contentLabel = new QLineEdit();
+        contentLabel->setText(ddlList[i].ddlContent);
+        ui->ddlTable->setCellWidget(i,1,contentLabel);
 
-//        //添加课程按钮
-//        addCourseButton(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
-//    }
+        //插入ddl要求
+        QLineEdit * requirementLabel = new QLineEdit();
+        requirementLabel->setText(ddlList[i].ddlRequirement);
+        ui->ddlTable->setCellWidget(i,2,requirementLabel);
 
-//    this->show();
+        //插入ddl截止时间
+        QLineEdit * timeLabel = new QLineEdit();
+        timeLabel->setText(ddlList[i].ddlTime);
+        ui->ddlTable->setCellWidget(i,3,timeLabel);
+
+        //插入ddl状态
+        QLineEdit * statusLabel=new QLineEdit();
+        QString status;
+        switch(ddlList[i].ddlStatus)
+        {
+        case 0:status="待完成";
+            statusLabel->setStyleSheet("font:bold;color:rgb(250,157,6)");
+            break;
+        case 1:status="已完成";
+            statusLabel->setStyleSheet("font:bold;color:rgb(73,183,110)");
+            break;
+        case 2:status="逾期";
+            statusLabel->setStyleSheet("font:bold;color:red");
+            break;
+        default:break;
+        }
+
+        statusLabel->setText(status);
+        ui->ddlTable->setCellWidget(i,4,statusLabel);
+
+        //待完成或逾期
+        if(ddlList[i].ddlStatus==0||ddlList[i].ddlStatus==2)
+        {
+            //插入已完成按钮
+            QPushButton * finishButton=new QPushButton(this);
+            finishButton->setText("已完成");
+            ui->ddlTable->setCellWidget(i,5,finishButton);
+
+            //处理完成信号
+            connect(finishButton,&QPushButton::clicked,
+                  [=]()
+            {
+                ddlList[i].ddlStatus=1;
+                QSqlQuery query1;
+                query1.exec(QString("update courseDdl set ddlStatus = 1 where ddl_id = %1;")
+                            .arg(ddlList[i].ddl_id));
+
+                //更改表格中的status
+                statusLabel->setText("已完成");
+                statusLabel->setStyleSheet("font:bold;color:rgb(73,183,110)");
+
+                //删除按钮
+                ui->ddlTable->removeCellWidget(i,4);
+                delete finishButton;
+
+            }
+                );
+        }
+    }
+}
+
+void MainWindow::insert(ddl newddl, QList<ddl>& ddlList)
+{
+    int index = 0;
+    while (index < ddlList.size())
+    {
+        if(!compareTime(newddl, ddlList[index]))
+            break;
+        index++;
+    }
+    ddlList.insert(index,newddl);
+}
+
+//返回1表示ddl1排在ddl2前面
+bool MainWindow::compareTime(ddl& ddl1, ddl& ddl2)
+{
+    return 1;
+}
+
+void MainWindow::initMain()
+{
+    initCourseTable();
+    initDdlTable();
+    this->show();
 }

@@ -14,6 +14,9 @@
 #include<QDebug>
 #include<QMessageBox>
 #include<QSqlError>
+#include <QMap>
+
+#include "ddl.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -30,6 +33,13 @@ public:
     //进入课程页面查看某一门课的详细信息
     Course course;
 
+    //记录每一个course_id对应的course_Name
+    QMap<int,QString> courseId_Name;
+
+    //所有课程的ddl列表
+    QList<ddl> ddlList;
+    void insert(ddl, QList<ddl>&);
+
     //添加新课程的页面
     AddCourse addCourse;
 
@@ -42,6 +52,9 @@ public:
     //初始化ddl表
     void initDdlTable();
 
+    //初始化课程表和ddl表
+    void initMain();
+
     Ui::MainWindow *ui;
 
     //database
@@ -50,6 +63,8 @@ public:
     //添加课程按钮
     void addCourseButton(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
 
+    //比较两个ddl的时间
+    bool compareTime(ddl&, ddl&);
 private:
     QPushButton *courseButton;
 private slots:
