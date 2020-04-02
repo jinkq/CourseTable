@@ -29,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&addCourse,&AddCourse::courseButtonSignal,this,&MainWindow::addCourseButton);
 
     //处理修改课程按钮的信号
-    connect(&course,&Course::changeCourseButtonSignal,this,&MainWindow::initCourseTable);
+    connect(&course,&Course::changeCourseButtonSignal,this,&MainWindow::initMain);
 
     //处理删除课程的信号
-    connect(&course,&Course::delCourseButtonSignal,this,&MainWindow::initCourseTable);
+    connect(&course,&Course::delCourseButtonSignal,this,&MainWindow::initMain);
 
     //要接收从课程基本信息页面的返回信号
     connect(&course, &Course::back2Main,
@@ -277,7 +277,7 @@ void MainWindow::initDdlTable()
                 statusLabel->setStyleSheet("font:bold;color:rgb(73,183,110)");
 
                 //删除按钮
-                ui->ddlTable->removeCellWidget(i,4);
+                ui->ddlTable->removeCellWidget(i,5);
                 delete finishButton;
 
             }
@@ -306,7 +306,7 @@ bool MainWindow::compareTime(ddl& ddl1, ddl& ddl2)
 
 void MainWindow::initMain()
 {
-    initCourseTable();
     initDdlTable();
+    initCourseTable();
     this->show();
 }

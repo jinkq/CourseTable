@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
 
     //MainWindow进去就是课程表的主界面
     MainWindow w;
-    //w.show();
 
     return a.exec();
 }
