@@ -236,6 +236,13 @@ void MainWindow::initDdlTable()
         ui->ddlTable->setCellWidget(i,3,timeLabel);
 
         //插入ddl状态
+        QString currentTime= QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
+        if(ddlList[i].ddlStatus==0&&currentTime>ddlList[i].ddlTime)
+        {
+            //逾期
+            ddlList[i].ddlStatus=2;
+        }
+
         QLineEdit * statusLabel=new QLineEdit();
         QString status;
         switch(ddlList[i].ddlStatus)
@@ -288,25 +295,31 @@ void MainWindow::initDdlTable()
 
 void MainWindow::insert(ddl newddl, QList<ddl>& ddlList)
 {
-    int index = 0;
-    while (index < ddlList.size())
+    int i = 0;
+    while (i < ddlList.size())
     {
-        if(!compareTime(newddl, ddlList[index]))
+        if(!compareTime(newddl, ddlList[i]))
             break;
-        index++;
+        i++;
     }
-    ddlList.insert(index,newddl);
+    ddlList.insert(i,newddl);
 }
 
-//返回1表示ddl1排在ddl2前面
+//返回true表示ddl1比ddl2更早截止
 bool MainWindow::compareTime(ddl& ddl1, ddl& ddl2)
 {
-    return 1;
+    if(ddl1.ddlTime>=ddl2.ddlTime)
+        return true;
+    return false;
 }
 
 void MainWindow::initMain()
 {
-    initDdlTable();
+    //默认先看到课程表
+    ui->tabWidget->setCurrentIndex(0);
+
     initCourseTable();
+    initDdlTable();
+
     this->show();
 }

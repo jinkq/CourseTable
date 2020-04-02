@@ -171,4 +171,3 @@ void Note::on_clearButton_clicked()
     this->ui->noteEdit->setText("");
     this->ui->noteTitleEdit->setText("");
 }
-

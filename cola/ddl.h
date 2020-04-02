@@ -64,6 +64,10 @@ public:
     //判断时间合法性
     bool isValidTime(const QString);
 
+    //比较时间
+    bool compareTime(QString, QString);
+
+
 signals:
     void back2Course();
 

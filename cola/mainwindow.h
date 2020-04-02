@@ -64,7 +64,7 @@ public:
     void addCourseButton(QString courseName,int courseDay, int courseTimeBegin, int courseTimeEnd, QString courseLocation,QString courseTeacher);
 
     //比较两个ddl的时间
-    bool compareTime(ddl&, ddl&);
+    bool compareTime(ddl&,ddl&);
 private:
     QPushButton *courseButton;
 private slots:

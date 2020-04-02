@@ -16,6 +16,7 @@ struct link
     QString linkAddress;
     int link_id;
     int course_id;
+    QString linkPsw;
 };
 
 

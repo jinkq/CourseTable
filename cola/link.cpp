@@ -74,14 +74,14 @@ void Link::initLinkTable()
     this->show();
 
     //设置行数、列数
-    int row=0,col=2;
+    int row=0,col=3;
     ui->linkTable->setRowCount(row);
     ui->linkTable->setColumnCount(col);
 
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"名称"<<"地址";
+    header<<"名称"<<"地址"<<"密码";
     ui->linkTable->setHorizontalHeaderLabels(header);
 
     //查询课程编号为course_id的所有link信息
@@ -98,6 +98,7 @@ void Link::initLinkTable()
         newLink.course_id = query.value("course_id").toInt();//course id
         newLink.linkName = query.value(2).toString();//链接名
         newLink.linkAddress = query.value(3).toString();//链接地址
+        newLink.linkPsw=query.value(4).toString();//密码
 
         //插入linkList中
         this->linkList << newLink;
@@ -117,6 +118,11 @@ void Link::initLinkTable()
         addressLabel->setOpenExternalLinks(true);
         ui->linkTable->setCellWidget(rowNum,1,addressLabel);
 
+        //插入密码
+        QLabel * pswLabel = new QLabel();
+        pswLabel->setText(newLink.linkPsw);
+        ui->linkTable->setCellWidget(rowNum,2,pswLabel);
+
         rowNum++;
     }
     ui->linkTable->insertRow(rowNum);
@@ -130,6 +136,7 @@ void Link::addLink()
 
     QTableWidgetItem *linkNameItem=ui->linkTable->item(row-1,0);
     QTableWidgetItem *linkAddressItem=ui->linkTable->item(row-1,1);
+    QTableWidgetItem *linkPswItem=ui->linkTable->item(row-1,2);
 
     //获得添加的内容（新一行）
     if(linkNameItem==nullptr||linkAddressItem==nullptr)
@@ -139,29 +146,36 @@ void Link::addLink()
     }
     QString linkName=linkNameItem->text();
     QString linkAddress = linkAddressItem->text();
+    QString linkPsw = linkPswItem->text();
 
     //item设为空
     linkNameItem->setText("");
     linkAddressItem->setText("");
+    linkPswItem->setText("");
 
     //label插入表格
     QLabel* linkNameLabel=new QLabel(this);
     QLabel* linkAddressLabel=new QLabel(this);
+    QLabel* linkPswLabel=new QLabel(this);
+
     linkNameLabel->setText(linkName);
     ui->linkTable->setCellWidget(row-1,0,linkNameLabel);
+
     linkAddressLabel->setText(QString("<a href=%1>%2</a>")
                           .arg(linkAddress).arg(linkAddress));
     linkAddressLabel->setOpenExternalLinks(true);
     ui->linkTable->setCellWidget(row-1,1,linkAddressLabel);
 
+    linkPswLabel->setText(linkPsw);
+    ui->linkTable->setCellWidget(row-1,2,linkPswLabel);
 
     //下面再加空行
     ui->linkTable->insertRow(row);
 
     //插入数据库
     QSqlQuery query;
-    query.exec(QString("insert into courseLink(course_id, linkName, linkAddress) values (%1, '%2', '%3');")
-               .arg(course_id).arg(linkName).arg(linkAddress));
+    query.exec(QString("insert into courseLink(course_id, linkName, linkAddress, linkPsw) values (%1, '%2', '%3', '%4');")
+               .arg(course_id).arg(linkName).arg(linkAddress).arg(linkPsw));
     QMessageBox::information(this,"success","添加成功");
 
     //添加到list
@@ -169,10 +183,11 @@ void Link::addLink()
     newlink.course_id = course_id;
     newlink.linkName = linkName;
     newlink.linkAddress = linkAddress;
-    qDebug() << newlink.course_id << newlink.linkName << newlink.linkAddress;
+    newlink.linkPsw=linkPsw;
+    //qDebug() << newlink.course_id << newlink.linkName << newlink.linkAddress;
     //读link_id出来
-    query.exec(QString("select link_id from courseLink where course_id = '%1' and linkName = '%2' and linkAddress = '%3'")
-               .arg(course_id).arg(newlink.linkName).arg(newlink.linkAddress));
+    query.exec(QString("select link_id from courseLink where course_id = '%1' and linkName = '%2' and linkAddress = '%3' and linkPsw = '%4'")
+               .arg(course_id).arg(newlink.linkName).arg(newlink.linkAddress).arg(newlink.linkPsw));
     query.next();
     newlink.link_id = query.value("link_id").toInt();
     qDebug() << newlink.link_id;

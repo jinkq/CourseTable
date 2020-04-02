@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>857</width>
+    <width>1140</width>
     <height>518</height>
    </rect>
   </property>
@@ -16,7 +16,7 @@
   <widget class="QLabel" name="titleLabel">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>610</x>
      <y>20</y>
      <width>191</width>
      <height>18</height>
@@ -39,41 +39,41 @@
     <string>返回</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="addLinkButton">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>60</y>
-     <width>80</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>添加链接</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="delLinkButton">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>100</y>
-     <width>80</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>删除链接</string>
-   </property>
-  </widget>
   <widget class="QTableWidget" name="linkTable">
    <property name="geometry">
     <rect>
      <x>180</x>
      <y>50</y>
-     <width>621</width>
+     <width>951</width>
      <height>341</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>40</y>
+     <width>121</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="addLinkButton">
+      <property name="text">
+       <string>添加链接</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="delLinkButton">
+      <property name="text">
+       <string>删除链接</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

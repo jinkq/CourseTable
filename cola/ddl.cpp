@@ -81,7 +81,7 @@ void DDL::initDdlTable()
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"ddl"<<"要求"<<"截止时间"<<"状态"<<"";
+    header<<"ddl"<<"要求"<<"截止时间\n（格式：2020-01-01 00:00）"<<"状态"<<"";
     ui->ddlTable->setHorizontalHeaderLabels(header);
 
     //查询课程编号为course_id的所有ddl信息
@@ -123,6 +123,13 @@ void DDL::initDdlTable()
         ui->ddlTable->setCellWidget(rowNum,2,timeLabel);
 
         //插入ddl状态
+        QString currentTime= QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
+        if(newDdl.ddlStatus==0&&compareTime(currentTime,newDdl.ddlTime))
+        {
+            //逾期
+            newDdl.ddlStatus=2;
+        }
+
         QLineEdit * statusLabel=new QLineEdit();
         QString status;
         switch(newDdl.ddlStatus)
@@ -364,3 +371,9 @@ void DDL::saveDdl()
     }
 }
 
+bool DDL::compareTime(QString time1, QString time2)
+{
+   if(time1>=time2)
+        return true;
+   return false;
+}
