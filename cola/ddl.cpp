@@ -128,10 +128,13 @@ void DDL::initDdlTable()
         switch(newDdl.ddlStatus)
         {
         case 0:status="待完成";
+            statusLabel->setStyleSheet("font:bold;color:rgb(250,157,6)");
             break;
         case 1:status="已完成";
+            statusLabel->setStyleSheet("font:bold;color:rgb(73,183,110)");
             break;
         case 2:status="逾期";
+            statusLabel->setStyleSheet("font:bold;color:red");
             break;
         default:break;
         }
@@ -158,6 +161,7 @@ void DDL::initDdlTable()
 
                 //更改表格中的status
                 statusLabel->setText("已完成");
+                statusLabel->setStyleSheet("font:bold;color:rgb(73,183,110)");
 
                 //删除按钮
                 ui->ddlTable->removeCellWidget(rowNum,4);
@@ -179,7 +183,7 @@ void DDL::addDdl()
     QTableWidgetItem *ddlContentItem=ui->ddlTable->item(row-1,0);
     QTableWidgetItem *ddlRequirementItem=ui->ddlTable->item(row-1,1);
     QTableWidgetItem *ddlTimeItem=ui->ddlTable->item(row-1,2);
-    QTableWidgetItem *ddlStatusItem=ui->ddlTable->item(row-1,3);
+    //QTableWidgetItem *ddlStatusItem=ui->ddlTable->item(row-1,3);
 
     //获得添加的内容（新一行）
     if(ddlContentItem==nullptr||ddlRequirementItem==nullptr)
@@ -250,6 +254,7 @@ void DDL::addDdl()
     ui->ddlTable->setCellWidget(row-1,2,ddlTimeLabel);
 
     ddlStatusLabel->setText("待完成");
+    ddlStatusLabel->setStyleSheet("font:bold;color:rgb(250,157,6)");
     ui->ddlTable->setCellWidget(row-1,3,ddlStatusLabel);
 
     //插入已完成按钮
@@ -268,6 +273,7 @@ void DDL::addDdl()
         //qDebug()<<newDdl.ddl_id;
         //更改表格中的status
         ddlStatusLabel->setText("已完成");
+        ddlStatusLabel->setStyleSheet("font:bold;color:rgb(73,183,110)");
 
         //删除按钮
         ui->ddlTable->removeCellWidget(row-1,4);
@@ -286,7 +292,7 @@ void DDL::addDdl()
 
 bool DDL::isValidTime(const QString time)
 {
-    QRegExp rx("\\d{4}[-]\\d{2}[-]\\d{2}[ ]\\d{2}\:[0-5]\\d");
+    QRegExp rx("\\d{4}[-][0-1]\\d[-][0-3]\\d[ ]\\d{2}\:[0-5]\\d");
 
     if(rx.exactMatch(time))
     {
@@ -322,12 +328,12 @@ void DDL::delDdl()
     ui->ddlTable->removeRow(currentRow);
 
     QMessageBox::information(this,"success","删除成功");
-    //initLinkTable();
 }
-
 
 void DDL::saveDdl()
 {
+    bool success=true;//成功
+
     QSqlQuery query;
     //依次去读出每一行的状态，更新到list中，然后更新数据库
     for (int i = 0;i < ui->ddlTable->rowCount()-1;i++)
@@ -341,7 +347,8 @@ void DDL::saveDdl()
         //检查时间的合法性
         if(!isValidTime(ddlList[i].ddlTime))
         {
-            QMessageBox::warning(this,"error",QString("第%1行:非法的ddl截止时间，格式：2020-01-01 12:00").arg(i));
+            QMessageBox::warning(this,"error",QString("第%1行:非法的ddl截止时间，格式：2020-01-01 12:00").arg(i+1));
+            success=false;
             continue;
         }
         //写到数据库中
@@ -350,7 +357,10 @@ void DDL::saveDdl()
                    .arg(ddlList[i].ddlContent).arg(ddlList[i].ddlRequirement)
                    .arg(ddlList[i].ddlTime).arg(ddlList[i].ddlStatus).arg(ddlList[i].ddl_id));
     }
-    //保存成功
-    QMessageBox::information(this,"success","保存成功");
+    if(success)
+    {
+        //保存成功
+        QMessageBox::information(this,"success","保存成功");
+    }
 }
 

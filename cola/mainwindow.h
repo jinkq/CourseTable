@@ -7,7 +7,6 @@
 #include <QList>
 #include <QLabel>
 #include <QString>
-#include <QFrame>
 #include<QPushButton>
 #include<QSqlQuery>
 #include<QTableWidget>

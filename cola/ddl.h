@@ -58,6 +58,9 @@ public:
     //保存ddl修改
     void saveDdl();
 
+    //按时间排序ddl
+    void sortDdl();
+
     //判断时间合法性
     bool isValidTime(const QString);
 

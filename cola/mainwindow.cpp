@@ -174,3 +174,56 @@ void MainWindow::addCourseButton(QString courseName, int courseDay, int courseTi
     }
     );
 }
+
+void MainWindow::initDdlTable()
+{
+    //初始化表格
+    ui->ddlTable = new QTableWidget(ui->tab_2);
+    //ui->courseTable->verticalHeader()->setVisible(false); //设置垂直头不可见,即左边序号不见
+    ui->ddlTable->setGeometry(10,0,1281,620);
+
+    //设置行数、列数
+    int row=0,col=5;
+    ui->courseTable->setRowCount(row);
+    ui->courseTable->setColumnCount(col);
+
+    //设置表头
+    QStringList header;
+    //将表头写入表格
+    header<<"课程名"<<"ddl"<<"要求"<<"截止时间"<<"状态"<<"";
+    ui->courseTable->setHorizontalHeaderLabels(header);
+
+//    //将schedule第一列内容写入table
+//    QSqlQuery query;
+//    query.exec("select * from schedule;");
+
+//    for(int i = 0; query.next(); i++)
+//    {
+//       ui->courseTable->setItem(i,0, new QTableWidgetItem(query.value(0).toString()));
+//    }
+
+//    //创建课程按钮
+//    QString courseName;
+//    int courseDay;
+//    int courseTimeBegin;
+//    int courseTimeEnd;
+//    QString courseLocation;
+//    QString courseTeacher;
+
+//    query.exec("select * from courseInfo;");
+//    while(query.next())
+//    {
+//        //获取信息
+//        courseName=query.value("courseName").toString();
+//        courseDay=query.value("courseDay").toInt();
+//        courseTimeBegin=query.value("courseTimeBegin").toInt();
+//        courseTimeEnd=query.value("courseTimeEnd").toInt();
+//        courseLocation=query.value("courseLocation").toString();
+//        courseTeacher=query.value("courseTeacher").toString();
+
+//        //添加课程按钮
+//        addCourseButton(courseName,courseDay,courseTimeBegin,courseTimeEnd,courseLocation,courseTeacher);
+//    }
+
+//    this->show();
+}
