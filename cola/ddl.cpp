@@ -51,8 +51,8 @@ void DDL::run(int courseId)
 
 void DDL::initDdlTable()
 {
-    //适应长度
-    ui->ddlTable->horizontalHeader()->setStretchLastSection(true);
+    //最后一列填满表格
+    //ui->ddlTable->horizontalHeader()->setStretchLastSection(true);
 
     //清空ddl列表
     ddlList.clear();
@@ -81,8 +81,14 @@ void DDL::initDdlTable()
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"ddl"<<"要求"<<"截止时间\n（格式：2020-01-01 00:00）"<<"状态"<<"";
+    header<<"ddl（必填）"<<"要求（必填，没有则填\"无\"）"<<"截止时间（必填）\n（格式：2020-01-01 00:00）"<<"状态（不用填写，自动生成）"<<"";
     ui->ddlTable->setHorizontalHeaderLabels(header);
+
+    //表格列宽
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
 
     //查询课程编号为course_id的所有ddl信息
     //QSqlQuery query;
@@ -130,7 +136,7 @@ void DDL::initDdlTable()
             newDdl.ddlStatus=2;
         }
 
-        QLineEdit * statusLabel=new QLineEdit();
+        QLabel * statusLabel=new QLabel();
         QString status;
         switch(newDdl.ddlStatus)
         {
@@ -193,9 +199,9 @@ void DDL::addDdl()
     //QTableWidgetItem *ddlStatusItem=ui->ddlTable->item(row-1,3);
 
     //获得添加的内容（新一行）
-    if(ddlContentItem==nullptr||ddlRequirementItem==nullptr)
+    if(ddlContentItem==nullptr||ddlRequirementItem==nullptr||ddlTimeItem==nullptr)
     {
-        QMessageBox::warning(this,"error","不能提交空添加");
+        QMessageBox::warning(this,"error","ddl内容、要求、时间均不能为空");
         return;
     }
     QString ddlContent=ddlContentItem->text();

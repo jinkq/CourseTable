@@ -25,11 +25,11 @@ AddCourse::~AddCourse()
 void AddCourse::addCourseInfo()
 {
     if(!addcourse_db.open())
-       {
-            QMessageBox::warning(this,QStringLiteral("错误"),"error");
-            qDebug()<<"open sql error (in addcourse)";
-            exit(0);//退出程序
-        }
+    {
+        QMessageBox::warning(this,QStringLiteral("错误"),"error");
+        qDebug()<<"open sql error (in addcourse)";
+        exit(0);//退出程序
+    }
 
     //获取编辑区内容
     QString courseName=ui->courseNameEdit->text();
@@ -43,6 +43,8 @@ void AddCourse::addCourseInfo()
     if(courseName=="")
     {
         QMessageBox::warning(this,"error","课程名不能为空");
+        //isValid=false;
+        //continue;
         return;
     }
 
@@ -50,6 +52,8 @@ void AddCourse::addCourseInfo()
     if(courseTimeBegin>courseTimeEnd)
     {
         QMessageBox::warning(this,"error","输入的课程节数不合法");
+        //isValid=false;
+        //continue;
         return;
     }
 
@@ -60,6 +64,8 @@ void AddCourse::addCourseInfo()
 
     //向MainWindow发信号，创建课程按钮
     emit courseButtonSignal(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation,courseTeacher);
+
+
 }
 
 void AddCourse::on_buttonBox_accepted()

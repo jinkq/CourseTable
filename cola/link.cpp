@@ -52,7 +52,7 @@ void Link::run(int courseId)
 void Link::initLinkTable()
 {
     //适应长度
-    ui->linkTable->horizontalHeader()->setStretchLastSection(true);
+    //ui->linkTable->horizontalHeader()->setStretchLastSection(true);
 
     //先清空link列表
     linkList.clear();
@@ -81,8 +81,14 @@ void Link::initLinkTable()
     //设置表头
     QStringList header;
     //将表头写入表格
-    header<<"名称"<<"地址"<<"密码";
+    header<<"名称（必填）"<<"地址（必填）"<<"密码（必填，没有则填\"无\")";
     ui->linkTable->setHorizontalHeaderLabels(header);
+
+    //表格列宽
+    ui->linkTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->linkTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    ui->linkTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+
 
     //查询课程编号为course_id的所有link信息
     //QSqlQuery query;
@@ -139,7 +145,7 @@ void Link::addLink()
     QTableWidgetItem *linkPswItem=ui->linkTable->item(row-1,2);
 
     //获得添加的内容（新一行）
-    if(linkNameItem==nullptr||linkAddressItem==nullptr)
+    if(linkNameItem==nullptr||linkAddressItem==nullptr||linkPswItem==nullptr)
     {
         QMessageBox::warning(this,"error","不能提交空添加");
         return;
