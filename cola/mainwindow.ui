@@ -29,8 +29,8 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>30</y>
+      <x>10</x>
+      <y>10</y>
       <width>1481</width>
       <height>741</height>
      </rect>
@@ -38,11 +38,19 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QWidget" name="widget_2" native="true">
+       <property name="font">
+        <font>
+         <family>Adobe Caslon Pro Bold</family>
+        </font>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -54,6 +62,31 @@
         </item>
         <item>
          <widget class="QPushButton" name="addCourseButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>90</width>
+            <height>73</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>75</width>
+            <height>61</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
           <property name="text">
            <string>添加课程</string>
           </property>
@@ -70,7 +103,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>625</height>
+            <height>580</height>
            </size>
           </property>
          </spacer>
