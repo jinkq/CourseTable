@@ -26,31 +26,21 @@
    <property name="styleSheet">
     <string notr="true">#QFrame{border:1px solid black}</string>
    </property>
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>9</y>
-      <width>1622</width>
-      <height>518</height>
+      <x>59</x>
+      <y>60</y>
+      <width>1451</width>
+      <height>741</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QWidget" name="widget_2" native="true">
-       <widget class="QPushButton" name="addCourseButton">
-        <property name="geometry">
-         <rect>
-          <x>9</x>
-          <y>78</y>
-          <width>80</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>添加课程</string>
-        </property>
-       </widget>
+      <widget class="QPushButton" name="addCourseButton">
+       <property name="text">
+        <string>添加课程</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -64,7 +54,7 @@
        <property name="minimumSize">
         <size>
          <width>100</width>
-         <height>600</height>
+         <height>700</height>
         </size>
        </property>
        <property name="currentIndex">
@@ -77,10 +67,10 @@
         <widget class="QTableWidget" name="courseTable">
          <property name="geometry">
           <rect>
-           <x>9</x>
-           <y>0</y>
-           <width>800</width>
-           <height>500</height>
+           <x>20</x>
+           <y>20</y>
+           <width>0</width>
+           <height>0</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -91,9 +81,12 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>800</width>
-           <height>500</height>
+           <width>0</width>
+           <height>0</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">.courseTable{border: 0px}</string>
          </property>
         </widget>
        </widget>
@@ -104,10 +97,10 @@
         <widget class="QTableWidget" name="ddlTable">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>0</y>
-           <width>1500</width>
-           <height>700</height>
+           <x>230</x>
+           <y>-10</y>
+           <width>0</width>
+           <height>0</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -118,8 +111,8 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>800</width>
-           <height>500</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </widget>

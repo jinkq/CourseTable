@@ -18,3 +18,4 @@ QWidget * QTableWidget::cellWidget ( int row, int column ) const
 dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(row,col))->text();
 ```
 
+强制类型转换之前要注意好转换成什么类型

@@ -77,12 +77,15 @@ void MainWindow::initCourseTable()
     //初始化表格
     ui->courseTable = new QTableWidget(ui->tab);
     //ui->courseTable->verticalHeader()->setVisible(false); //设置垂直头不可见,即左边序号不见
-    ui->courseTable->setGeometry(10,0,1281,620);
+    ui->courseTable->setGeometry(10,0,1281,675);
 
     //设置行数、列数
     int row=11,col=8;
     ui->courseTable->setRowCount(row);
     ui->courseTable->setColumnCount(col);
+
+    ui->courseTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->courseTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     //设置表头
     QStringList header;
@@ -181,13 +184,16 @@ void MainWindow::initDdlTable()
     //初始化表格
     ui->ddlTable = new QTableWidget(ui->tab_2);
     //ui->courseTable->verticalHeader()->setVisible(false); //设置垂直头不可见,即左边序号不见
-    ui->ddlTable->setGeometry(10,0,1281,620);
+    ui->ddlTable->setGeometry(10,0,1281,675);
 
     //设置行数、列数
     int row=0,col=6;
     ui->ddlTable->setRowCount(row);
     ui->ddlTable->setColumnCount(col);
 
+    //设置自适应
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->ddlTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     //设置表头
     QStringList header;

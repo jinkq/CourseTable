@@ -15,6 +15,7 @@
 #include<QMessageBox>
 #include<QSqlError>
 #include <QMap>
+#include <QHeaderView>
 
 #include "ddl.h"
 

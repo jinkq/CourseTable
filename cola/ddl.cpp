@@ -343,6 +343,24 @@ void DDL::delDdl()
     QMessageBox::information(this,"success","删除成功");
 }
 
+//将中文的状态转化为数字
+int statusTransorm(QString status)
+{
+    if (QString::compare(status, QString("已完成")) == 0)
+    {
+        return 1;
+    }
+    else if (QString::compare(status, "待完成") == 0)
+    {
+        return 0;
+    }
+    else if (QString::compare(status, "逾期") == 0)
+    {
+        return 2;
+    }
+    return -1;
+}
+
 void DDL::saveDdl()
 {
     bool success=true;//成功
@@ -356,7 +374,8 @@ void DDL::saveDdl()
         this->ddlList[i].ddlContent = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,0))->text();
         this->ddlList[i].ddlRequirement = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,1))->text();
         this->ddlList[i].ddlTime = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,2))->text();
-        this->ddlList[i].ddlStatus = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,3))->text().toInt();
+        this->ddlList[i].ddlStatus = statusTransorm(dynamic_cast<QLabel*>(ui->ddlTable->cellWidget(i,3))->text());
+
         //检查时间的合法性
         if(!isValidTime(ddlList[i].ddlTime))
         {
