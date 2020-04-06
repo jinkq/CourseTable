@@ -147,7 +147,7 @@ void Link::addLink()
     //获得添加的内容（新一行）
     if(linkNameItem==nullptr||linkAddressItem==nullptr||linkPswItem==nullptr)
     {
-        QMessageBox::warning(this,"error","不能提交空添加");
+        QMessageBox::warning(this,"error","添加失败，链接名称、地址、密码均不能为空");
         return;
     }
     QString linkName=linkNameItem->text();
@@ -204,30 +204,34 @@ void Link::addLink()
 
 void Link::delLink()
 {
-    //定位到行
-    int currentRow=ui->linkTable->currentRow();
-
-    //加一个判断行是否删除空的（未选中返回-1）
-    if(currentRow<0||currentRow==ui->linkTable->rowCount()-1)
+    int sure=QMessageBox::question(this,"sure","确定要删除该链接吗？");
+    if(sure==QMessageBox::Yes)
     {
-        QMessageBox::warning(this,"error","删除不能为空");
-        return;
+        //定位到行
+        int currentRow=ui->linkTable->currentRow();
+
+        //加一个判断行是否删除空的（未选中返回-1）
+        if(currentRow<0||currentRow==ui->linkTable->rowCount()-1)
+        {
+            QMessageBox::warning(this,"error","删除失败，删除不能为空");
+            return;
+        }
+
+        //从list中读取link_id
+        int delLink_id = linkList[currentRow].link_id;
+
+        //读完后从list中删除掉
+        linkList.removeAt(currentRow);
+
+        //从数据库中删除
+        QSqlQuery query;
+        query.exec(QString("Delete from courseLink where link_id = %1;")
+                   .arg(delLink_id));
+
+        //删除当前行
+        ui->linkTable->removeRow(currentRow);
+
+        QMessageBox::information(this,"success","删除成功");
+        //initLinkTable();
     }
-
-    //从list中读取link_id
-    int delLink_id = linkList[currentRow].link_id;
-
-    //读完后从list中删除掉
-    linkList.removeAt(currentRow);
-
-    //从数据库中删除
-    QSqlQuery query;
-    query.exec(QString("Delete from courseLink where link_id = %1;")
-               .arg(delLink_id));
-
-    //删除当前行
-    ui->linkTable->removeRow(currentRow);
-
-    QMessageBox::information(this,"success","删除成功");
-    //initLinkTable();
 }

@@ -15,6 +15,9 @@ AddCourse::AddCourse(QWidget *parent) :
     //设置窗口标题
     setWindowTitle("添加课程");
 
+    //设置dialog button文字
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText("确定");
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText("取消");
 }
 
 AddCourse::~AddCourse()
@@ -22,7 +25,7 @@ AddCourse::~AddCourse()
     delete ui;
 }
 
-void AddCourse::addCourseInfo()
+void AddCourse::on_buttonBox_accepted()
 {
     if(!addcourse_db.open())
     {
@@ -42,7 +45,7 @@ void AddCourse::addCourseInfo()
     //判断课程名是否非空
     if(courseName=="")
     {
-        QMessageBox::warning(this,"error","课程名不能为空");
+        QMessageBox::warning(this,"error","添加失败，课程名不能为空");
         //isValid=false;
         //continue;
         return;
@@ -51,9 +54,13 @@ void AddCourse::addCourseInfo()
     //判断课程节数是否合法
     if(courseTimeBegin>courseTimeEnd)
     {
-        QMessageBox::warning(this,"error","输入的课程节数不合法");
-        //isValid=false;
-        //continue;
+        QMessageBox::warning(this,"error","添加失败，输入的课程节数不合法");
+        return;
+    }
+
+    if(conflict(courseDay,courseTimeBegin,courseTimeEnd))
+    {
+        QMessageBox::warning(this,"error","添加失败，新添加的课程与已有课程时间冲突");
         return;
     }
 
@@ -64,13 +71,6 @@ void AddCourse::addCourseInfo()
 
     //向MainWindow发信号，创建课程按钮
     emit courseButtonSignal(courseName, courseDay,courseTimeBegin, courseTimeEnd, courseLocation,courseTeacher);
-
-
-}
-
-void AddCourse::on_buttonBox_accepted()
-{
-    addCourseInfo();
 }
 
 void AddCourse::clearEdit()
@@ -83,3 +83,34 @@ void AddCourse::clearEdit()
     ui->courseTeacherEdit->clear();
 }
 
+bool AddCourse::conflict(int courseDay, int courseTimeBegin, int courseTimeEnd)
+{
+    QSqlQuery query;
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin >= %2 and courseTimeEnd <= %3;")
+               .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+    int num=0;//用于判断有无冲突
+    while(query.next())
+    {
+        num++;
+    }
+
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin <= %2 and courseTimeEnd >= %2;")
+               .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+    while(query.next())
+    {
+        num++;
+    }
+
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin <= %3 and courseTimeEnd >= %3;")
+               .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+    while(query.next())
+    {
+        num++;
+    }
+
+    if(num>0)
+    {
+        return true;
+    }
+    return false;
+}

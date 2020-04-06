@@ -137,14 +137,14 @@ void Course::save()
     //判断课程名是否非空
     if(courseName=="")
     {
-        QMessageBox::warning(this,"error","课程名不能为空");
+        QMessageBox::warning(this,"error","保存失败，课程名不能为空");
         return;
     }
 
     //判断课程节数是否合法
     if(courseTimeBegin>courseTimeEnd)
     {
-        QMessageBox::warning(this,"error","输入的课程节数不合法");
+        QMessageBox::warning(this,"error","保存失败，输入的课程节数不合法");
         return;
     }
 
@@ -159,21 +159,29 @@ void Course::save()
     //向MainWindow发信号，修改课程按钮
     emit changeCourseButtonSignal();
 
-    qDebug() << "here";
+    //qDebug() << "here";
     this->close();
 }
 
 void Course::del()
 {
-    QSqlQuery query;
-    //从sql中删除课程
-    query.exec(QString("delete from courseInfo where course_id = %1;")
-               .arg(course_id));
+    int sure=QMessageBox::question(this,"sure","确定要删除该课程吗？\n（删除课程将同时删除该课程的ddl和链接）");
+    if(sure==QMessageBox::Yes)
+    {
+        QSqlQuery query;
+        //从sql中删除课程
+        query.exec(QString("delete from courseInfo where course_id = %1;")
+                   .arg(course_id));
+        query.exec(QString("delete from courseDdl where course_id = %1;")
+                   .arg(course_id));
+        query.exec(QString("delete from courseLink where course_id = %1;")
+                   .arg(course_id));
 
-    //删除成功
-    QMessageBox::information(this,"success","删除成功");
+        //删除成功
+        QMessageBox::information(this,"success","删除成功");
 
-    //向MainWindow发信号，修改课程按钮
-    this->close();
-    emit delCourseButtonSignal();
+        //向MainWindow发信号，修改课程按钮
+        this->close();
+        emit delCourseButtonSignal();
+    }
 }

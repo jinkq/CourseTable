@@ -18,14 +18,14 @@ public:
     explicit AddCourse(QWidget *parent = nullptr);
     ~AddCourse();
 
-    //添加课程信息
-    void addCourseInfo();
-
     //数据库
     QSqlDatabase addcourse_db;
 
     //清空编辑区
     void clearEdit();
+
+    //判断课程时间冲突
+    bool conflict(int courseDay,int courseTimeBegin,int courseTimeEnd);
 
 signals:
     //创建课程按钮->MainWindow

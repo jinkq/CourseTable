@@ -55,7 +55,7 @@ void Note::run(int courseId)
         ui->noteTitleEdit->clear();
         ui->noteTitleEdit->clear();
     }
-            );
+    );
 }
 
 void Note::saveNote()
@@ -78,7 +78,7 @@ void Note::saveNote()
 
     //保存文件
     //QString path=QFileDialog::getSaveFileName(this,"保存",
-                              //QString("../note/%1.txt").arg(currentTime),"TXT(*.txt)");
+    //QString("../note/%1.txt").arg(currentTime),"TXT(*.txt)");
 
     QString path=dir.filePath(QString("%1 %2.txt").arg(currentTime).arg(noteTitle));
 
@@ -113,61 +113,69 @@ void Note::saveNote()
 
 void Note::loadNote()
 {
-    ui->noteTitleEdit->clear();
-    ui->noteTitleEdit->clear();
-
-    //获取笔记标题
-    QString noteTitle=ui->noteTitleEdit->text();
-
-    //创建文件夹
-    QDir dir;
-    if(!dir.exists(QString("../note/%1").arg(courseName)))
+    int sure=QMessageBox::question(this,"sure","确定要打开笔记吗？\n警告：会覆盖当前笔记");
+    if(sure==QMessageBox::Yes)
     {
-        dir.mkdir(QString("../note/%1").arg(courseName));
-    }
-    dir=QString("../note/%1").arg(courseName);
+        ui->noteTitleEdit->clear();
+        ui->noteTitleEdit->clear();
 
-    //打开文件
-    QString path=QFileDialog::getOpenFileName(this,"打开",
-                              QString("../note/%1").arg(courseName),"TXT(*.txt)");
+        //获取笔记标题
+        QString noteTitle=ui->noteTitleEdit->text();
 
-    //QString path=dir.filePath(QString("%1 %2.txt").arg(currentTime).arg(noteTitle));
-
-    if(path.isEmpty()==false)
-    {
-        QFile file;//创建文件对象
-
-        //关联文件名字
-        file.setFileName(path);
-
-        //打开文件，只写方式
-        bool isOk=file.open(QIODevice::ReadWrite);
-        if(isOk==true)
+        //创建文件夹
+        QDir dir;
+        if(!dir.exists(QString("../note/%1").arg(courseName)))
         {
-            //先读标题
-            QByteArray title;
-            if(file.atEnd()==false)
-            {
-                title = file.readLine();
-                ui->noteTitleEdit->setText(title);
-            }
-
-            //读文件（一行一行读）
-            QByteArray array;
-            while(file.atEnd()==false)
-            {
-                //读一行
-                array+=file.readLine();
-            }
-            ui->noteEdit->setText(array);
+            dir.mkdir(QString("../note/%1").arg(courseName));
         }
-        //关闭文件
-        file.close();
+        dir=QString("../note/%1").arg(courseName);
+
+        //打开文件
+        QString path=QFileDialog::getOpenFileName(this,"打开",
+                                                  QString("../note/%1").arg(courseName),"TXT(*.txt)");
+
+        //QString path=dir.filePath(QString("%1 %2.txt").arg(currentTime).arg(noteTitle));
+
+        if(path.isEmpty()==false)
+        {
+            QFile file;//创建文件对象
+
+            //关联文件名字
+            file.setFileName(path);
+
+            //打开文件，只写方式
+            bool isOk=file.open(QIODevice::ReadWrite);
+            if(isOk==true)
+            {
+                //先读标题
+                QByteArray title;
+                if(file.atEnd()==false)
+                {
+                    title = file.readLine();
+                    ui->noteTitleEdit->setText(title);
+                }
+
+                //读文件（一行一行读）
+                QByteArray array;
+                while(file.atEnd()==false)
+                {
+                    //读一行
+                    array+=file.readLine();
+                }
+                ui->noteEdit->setText(array);
+            }
+            //关闭文件
+            file.close();
+        }
     }
 }
 
 void Note::on_clearButton_clicked()
 {
-    this->ui->noteEdit->setText("");
-    this->ui->noteTitleEdit->setText("");
+    int sure=QMessageBox::question(this,"sure","确定要清空吗？\n警告：会丢失未保存的笔记");
+    if(sure==QMessageBox::Yes)
+    {
+        this->ui->noteEdit->setText("");
+        this->ui->noteTitleEdit->setText("");
+    }
 }

@@ -201,7 +201,7 @@ void DDL::addDdl()
     //获得添加的内容（新一行）
     if(ddlContentItem==nullptr||ddlRequirementItem==nullptr||ddlTimeItem==nullptr)
     {
-        QMessageBox::warning(this,"error","ddl内容、要求、时间均不能为空");
+        QMessageBox::warning(this,"error","添加失败，ddl内容、要求、时间均不能为空");
         return;
     }
     QString ddlContent=ddlContentItem->text();
@@ -212,7 +212,7 @@ void DDL::addDdl()
     if(!isValidTime(ddlTime))
     {
         ddlTimeItem->setText("");
-        QMessageBox::warning(this,"error","非法的ddl截止时间，格式：2020-01-01 12:00");
+        QMessageBox::warning(this,"error","添加失败，非法的ddl截止时间，格式：2020-01-01 12:00");
         return;
     }
 
@@ -316,31 +316,35 @@ bool DDL::isValidTime(const QString time)
 
 void DDL::delDdl()
 {
-    //定位到行
-    int currentRow=ui->ddlTable->currentRow();
-
-    //加一个判断行是否删除空的（未选中返回-1）
-    if(currentRow<0||currentRow==ui->ddlTable->rowCount()-1)
+    int sure=QMessageBox::question(this,"sure","确定要删除该ddl吗？");
+    if(sure==QMessageBox::Yes)
     {
-        QMessageBox::warning(this,"error","删除不能为空");
-        return;
+        //定位到行
+        int currentRow=ui->ddlTable->currentRow();
+
+        //加一个判断行是否删除空的（未选中返回-1）
+        if(currentRow<0||currentRow==ui->ddlTable->rowCount()-1)
+        {
+            QMessageBox::warning(this,"error","删除失败，删除不能为空");
+            return;
+        }
+
+        //从list中读取ddl_id
+        int delDdl_id = ddlList[currentRow].ddl_id;
+
+        //读完后从list中删除掉
+        ddlList.removeAt(currentRow);
+
+        //从数据库中删除
+        QSqlQuery query;
+        query.exec(QString("Delete from courseDdl where ddl_id = %1;")
+                   .arg(delDdl_id));
+
+        //删除当前行
+        ui->ddlTable->removeRow(currentRow);
+
+        QMessageBox::information(this,"success","删除成功");
     }
-
-    //从list中读取ddl_id
-    int delDdl_id = ddlList[currentRow].ddl_id;
-
-    //读完后从list中删除掉
-    ddlList.removeAt(currentRow);
-
-    //从数据库中删除
-    QSqlQuery query;
-    query.exec(QString("Delete from courseDdl where ddl_id = %1;")
-               .arg(delDdl_id));
-
-    //删除当前行
-    ui->ddlTable->removeRow(currentRow);
-
-    QMessageBox::information(this,"success","删除成功");
 }
 
 //将中文的状态转化为数字
