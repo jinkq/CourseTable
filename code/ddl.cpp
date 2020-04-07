@@ -370,11 +370,11 @@ void DDL::saveDdl()
     bool success=true;//成功
 
     QSqlQuery query;
-    //依次去读出每一行的状态，更新到list中，然后更新数据库
+    //依次去读出每一行的状态，更新到ddlList中，然后更新数据库
     for (int i = 0;i < ui->ddlTable->rowCount()-1;i++)
     {
         qDebug() << i;
-        //更新list中的信息
+        //更新list中的信息（强制类型转换）
         this->ddlList[i].ddlContent = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,0))->text();
         this->ddlList[i].ddlRequirement = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,1))->text();
         this->ddlList[i].ddlTime = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,2))->text();

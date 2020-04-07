@@ -23,7 +23,8 @@
          <item>
           <widget class="QLabel" name="courseNameLabel">
            <property name="text">
-            <string>课程名：</string>
+            <string>课程名：
+（必填）</string>
            </property>
           </widget>
          </item>

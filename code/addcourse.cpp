@@ -58,6 +58,7 @@ void AddCourse::on_buttonBox_accepted()
         return;
     }
 
+    //判断课程时间冲突
     if(conflict(courseDay,courseTimeBegin,courseTimeEnd))
     {
         QMessageBox::warning(this,"error","添加失败，新添加的课程与已有课程时间冲突");
@@ -86,26 +87,30 @@ void AddCourse::clearEdit()
 bool AddCourse::conflict(int courseDay, int courseTimeBegin, int courseTimeEnd)
 {
     QSqlQuery query;
-    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin >= %2 and courseTimeEnd <= %3;")
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin <= %2 and courseTimeEnd >= %3;")
                .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+
     int num=0;//用于判断有无冲突
     while(query.next())
     {
         num++;
+        qDebug()<<query.value(1).toString();
     }
 
-    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin <= %2 and courseTimeEnd >= %2;")
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin >= %2 and courseTimeBegin <= %3;")
                .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
     while(query.next())
     {
         num++;
+        qDebug()<<2;
     }
 
-    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin <= %3 and courseTimeEnd >= %3;")
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeEnd >= %2 and courseTimeEnd <= %3;")
                .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
     while(query.next())
     {
         num++;
+        qDebug()<<3;
     }
 
     if(num>0)

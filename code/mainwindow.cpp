@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     //qDebug() << QSqlDatabase::drivers();
 
+    //设置窗口标题
+    setWindowTitle("课程管理系统");
+
     //连接数据库
     connectSql();
 
@@ -192,7 +195,12 @@ void MainWindow::initDdlTable()
     ui->ddlTable->setColumnCount(col);
 
     //设置自适应
-    ui->ddlTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(0,QHeaderView::ResizeToContents);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Stretch);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(3,QHeaderView::ResizeToContents);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(4,QHeaderView::ResizeToContents);
+    ui->ddlTable->horizontalHeader()->setSectionResizeMode(5,QHeaderView::ResizeToContents);
     ui->ddlTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     //设置表头

@@ -46,19 +46,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="returnButton">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>140</y>
-     <width>112</width>
-     <height>34</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>返回</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="widget_4" native="true">
    <property name="geometry">
     <rect>
@@ -388,10 +375,10 @@
   <widget class="QWidget" name="widget_6" native="true">
    <property name="geometry">
     <rect>
-     <x>77</x>
-     <y>180</y>
-     <width>111</width>
-     <height>121</height>
+     <x>60</x>
+     <y>90</y>
+     <width>131</width>
+     <height>181</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -406,6 +393,13 @@
      <widget class="QPushButton" name="delButton">
       <property name="text">
        <string>删除课程</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="returnButton">
+      <property name="text">
+       <string>返回</string>
       </property>
      </widget>
     </item>

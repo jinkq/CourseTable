@@ -61,6 +61,9 @@ signals:
     //删除课程按钮->MainWindow
     void delCourseButtonSignal();
 
+    //判断课程时间冲突
+    bool conflict(int courseDay,int courseTimeBegin,int courseTimeEnd);
+
 private slots:
 
 private:

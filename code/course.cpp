@@ -148,6 +148,13 @@ void Course::save()
         return;
     }
 
+    //判断课程时间冲突
+    if(conflict(courseDay,courseTimeBegin,courseTimeEnd))
+    {
+        QMessageBox::warning(this,"error","保存失败，修改后的时间与已有课程时间冲突");
+        return;
+    }
+
     QSqlQuery query;
     //将编辑区内容写入sql
     query.exec(QString("update courseInfo set courseName = '%1', courseDay = %2,courseTimeBegin = %3, courseTimeEnd = %4, courseLocation = '%5',courseTeacher = '%6' where course_id = %7;")
@@ -184,4 +191,40 @@ void Course::del()
         this->close();
         emit delCourseButtonSignal();
     }
+}
+
+bool Course::conflict(int courseDay, int courseTimeBegin, int courseTimeEnd)
+{
+    QSqlQuery query;
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin <= %2 and courseTimeEnd >= %3;")
+               .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+
+    int num=0;//用于判断有无冲突
+    while(query.next())
+    {
+        num++;
+        qDebug()<<query.value(1).toString();
+    }
+
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeBegin >= %2 and courseTimeBegin <= %3;")
+               .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+    while(query.next())
+    {
+        num++;
+        qDebug()<<2;
+    }
+
+    query.exec(QString("select * from courseInfo where courseDay = %1 and courseTimeEnd >= %2 and courseTimeEnd <= %3;")
+               .arg(courseDay).arg(courseTimeBegin).arg(courseTimeEnd));
+    while(query.next())
+    {
+        num++;
+        qDebug()<<3;
+    }
+
+    if(num>0)
+    {
+        return true;
+    }
+    return false;
 }
