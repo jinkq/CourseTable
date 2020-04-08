@@ -255,7 +255,7 @@ void DDL::addDdl()
     QLineEdit* ddlContentLabel=new QLineEdit(this);
     QLineEdit* ddlRequirementLabel=new QLineEdit(this);
     QLineEdit* ddlTimeLabel=new QLineEdit(this);
-    QLineEdit* ddlStatusLabel=new QLineEdit(this);
+    QLabel* ddlStatusLabel=new QLabel(this);
 
     ddlContentLabel->setText(ddlContent);
     ui->ddlTable->setCellWidget(row-1,0,ddlContentLabel);
@@ -379,7 +379,6 @@ void DDL::saveDdl()
         this->ddlList[i].ddlRequirement = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,1))->text();
         this->ddlList[i].ddlTime = dynamic_cast<QLineEdit*>(ui->ddlTable->cellWidget(i,2))->text();
         this->ddlList[i].ddlStatus = statusTransorm(dynamic_cast<QLabel*>(ui->ddlTable->cellWidget(i,3))->text());
-
         //检查时间的合法性
         if(!isValidTime(ddlList[i].ddlTime))
         {
